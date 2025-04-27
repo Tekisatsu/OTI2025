@@ -35,4 +35,14 @@ public class Osoite {
     public void setZip(int zip) {
         this.zip = zip;
     }
+
+    @Override
+    public String toString() {
+        return "Osoite{" +
+                "osoite='" + osoite + '\'' +
+                ", kaupunki='" + kaupunki + '\'' +
+                ", maa='" + maa + '\'' +
+                ", zip=" + zip +
+                '}';
+    }
 }

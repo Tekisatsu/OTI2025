@@ -44,4 +44,15 @@ public class Mokki {
     public void setId(int id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Mokki{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", osoite=" + osoite +
+                ", tila='" + tila + '\'' +
+                ", vuokrahinta=" + vuokrahinta +
+                '}';
+    }
 }
