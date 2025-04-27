@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.util.*;
 
-public class kayttoliittymaKirjautuminenPohja extends Application {
+public class KayttoliittymaKirjautuminenPohja extends Application {
     private List<Pelaaja> pelaajat;
     private List<String> pelaajaNimet;
     private List<Integer> pelaajaPisteet;
