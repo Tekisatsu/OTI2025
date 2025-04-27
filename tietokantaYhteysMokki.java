@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class tietokantaYhteysMokki {
-    private String url = "jdbc:mysql://localhost:3306/mokki_varaus?useSSL=false";
+    private String url = "jdbc:mysql://localhost:3306/mokkikodit?useSSL=false";
     private String kayttajanimi = "tietokantaKäyttäjäNimi";
     private String salasana = "tietokantaSalasana";
 
