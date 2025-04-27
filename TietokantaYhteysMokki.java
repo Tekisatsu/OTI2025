@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class tietokantaYhteysMokki {
+public class TietokantaYhteysMokki {
     private String url = "jdbc:mysql://localhost:3306/mokkikodit?useSSL=false";
     private String kayttajanimi = "tietokantaKäyttäjäNimi";
     private String salasana = "tietokantaSalasana";
