@@ -74,4 +74,18 @@ public class Lasku {
     public void setMaara(double maara) {
         this.maara = maara;
     }
+
+    @Override
+    public String toString() {
+        return "Lasku{" +
+                "id=" + id +
+                ", viitenumero='" + viitenumero +
+                ", eräpäivä=" + erapaiva + '\'' +
+                ", maksaja='" + maksaja + '\'' +
+                ", saaja=" + saaja + '\'' +
+                ", ytunnus='" + ytunnus + '\'' +
+                ", alvprosentti=" + alvprosentti +
+                ", määrä='" + maara +
+                '}';
+    }
 }
