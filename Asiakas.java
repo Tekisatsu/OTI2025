@@ -47,4 +47,14 @@ public class Asiakas {
         this.osoite = osoite;
     }
 
+    @Override
+    public String toString() {
+        return "Asiakas{" +
+                "id=" + id +
+                ", nimi='" + nimi + '\'' +
+                ", sähköposti=" + sahkoposti + '\'' +
+                ", puhelinnumero='" + puhelinnumero + '\'' +
+                ", osoite=" + osoite +
+                '}';
+    }
 }
