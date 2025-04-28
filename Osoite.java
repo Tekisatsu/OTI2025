@@ -1,6 +1,14 @@
 public class Osoite {
     String osoite;
     String kaupunki;
+
+    public Osoite(String osoite, String kaupunki, String maa, int zip) {
+        this.osoite = osoite;
+        this.kaupunki = kaupunki;
+        this.maa = maa;
+        this.zip = zip;
+    }
+
     String maa;
     int zip;
 

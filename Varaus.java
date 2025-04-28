@@ -5,6 +5,16 @@ public class Varaus {
     int asiakas_id;
     int mokki_id;
     int lasku_id;
+
+    public Varaus(int id, int asiakas_id, int mokki_id, int lasku_id, LocalDate alkamispaivamaara, LocalDate paattumispaivamaara) {
+        this.id = id;
+        this.asiakas_id = asiakas_id;
+        this.mokki_id = mokki_id;
+        this.lasku_id = lasku_id;
+        this.alkamispaivamaara = alkamispaivamaara;
+        this.paattumispaivamaara = paattumispaivamaara;
+    }
+
     LocalDate alkamispaivamaara;
     LocalDate paattumispaivamaara;
 
