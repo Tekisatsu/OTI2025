@@ -3,6 +3,15 @@ public class Mokki {
     String name;
     Osoite osoite;
     String tila;
+
+    public Mokki(int id, String name, Osoite osoite, String tila, double vuokrahinta) {
+        this.id = id;
+        this.name = name;
+        this.osoite = osoite;
+        this.tila = tila;
+        this.vuokrahinta = vuokrahinta;
+    }
+
     double vuokrahinta;
 
     public double getVuokrahinta() {
