@@ -1,6 +1,8 @@
 public class Osoite {
     String osoite;
     String kaupunki;
+    String maa;
+    int zip;
 
     public Osoite(String osoite, String kaupunki, String maa, int zip) {
         this.osoite = osoite;
@@ -8,9 +10,6 @@ public class Osoite {
         this.maa = maa;
         this.zip = zip;
     }
-
-    String maa;
-    int zip;
 
     public String getOsoite() {
         return osoite;

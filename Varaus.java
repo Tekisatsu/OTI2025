@@ -5,6 +5,8 @@ public class Varaus {
     int asiakas_id;
     int mokki_id;
     int lasku_id;
+    LocalDate alkamispaivamaara;
+    LocalDate paattumispaivamaara;
 
     public Varaus(int id, int asiakas_id, int mokki_id, int lasku_id, LocalDate alkamispaivamaara, LocalDate paattumispaivamaara) {
         this.id = id;
@@ -14,9 +16,6 @@ public class Varaus {
         this.alkamispaivamaara = alkamispaivamaara;
         this.paattumispaivamaara = paattumispaivamaara;
     }
-
-    LocalDate alkamispaivamaara;
-    LocalDate paattumispaivamaara;
 
     public int getId() {
         return id;
