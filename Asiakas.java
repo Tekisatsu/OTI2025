@@ -6,6 +6,13 @@ public class Asiakas {
     private String puhelinnumero;
     private Osoite osoite;
 
+    public Asiakas(String id, String nimi, String sahkoposti, String puhelinnumero, Osoite osoite) {
+        this.id = Integer.parseInt(id);
+        this.nimi = nimi;
+        this.sahkoposti = sahkoposti;
+        this.puhelinnumero = puhelinnumero;
+        this.osoite = osoite;
+    }
 
     public int getId() {
         return id;
@@ -52,7 +59,7 @@ public class Asiakas {
         return "Asiakas{" +
                 "id=" + id +
                 ", nimi='" + nimi + '\'' +
-                ", sähköposti=" + sahkoposti + '\'' +
+                ", sahkoposti=" + sahkoposti + '\'' +
                 ", puhelinnumero='" + puhelinnumero + '\'' +
                 ", osoite=" + osoite +
                 '}';
