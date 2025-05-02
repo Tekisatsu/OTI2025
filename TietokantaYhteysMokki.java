@@ -6,7 +6,7 @@ import java.util.List;
 
 public class TietokantaYhteysMokki {
     private String url = "jdbc:mysql://localhost:3306/mokkikodit?useSSL=false";
-    private String kayttajanimi = "tietokantaKäyttäjäNimi";
+    private String kayttajanimi = "root";
     private String salasana = "tietokantaSalasana";
 
     private Connection getConnection() throws SQLException {
