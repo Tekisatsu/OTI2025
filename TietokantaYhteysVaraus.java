@@ -4,7 +4,7 @@ import java.util.List;
 
 public class TietokantaYhteysVaraus {
     private String url = "jdbc:mysql://localhost:3306/mokki_varaus?useSSL=false";
-    private String kayttajanimi = "tietokantaKäyttäjäNimi";
+    private String kayttajanimi = "root";
     private String salasana = "tietokantaSalasana";
 
     private Connection getConnection() throws SQLException {
