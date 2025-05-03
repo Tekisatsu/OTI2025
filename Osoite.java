@@ -1,4 +1,5 @@
 public class Osoite {
+    int id;
     String osoite;
     String kaupunki;
     String maa;
@@ -9,6 +10,12 @@ public class Osoite {
         this.kaupunki = kaupunki;
         this.maa = maa;
         this.zip = zip;
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getOsoite() {
