@@ -1,4 +1,5 @@
 public class Osoite {
+    int id;
     String osoite;
     String kaupunki;
     String maa;
@@ -9,6 +10,12 @@ public class Osoite {
         this.kaupunki = kaupunki;
         this.maa = maa;
         this.zip = zip;
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getOsoite() {
@@ -45,11 +52,6 @@ public class Osoite {
 
     @Override
     public String toString() {
-        return "Osoite{" +
-                "osoite='" + osoite + '\'' +
-                ", kaupunki='" + kaupunki + '\'' +
-                ", maa='" + maa + '\'' +
-                ", zip=" + zip +
-                '}';
+        return ""+osoite+", "+kaupunki+", "+zip+", "+maa;
     }
 }

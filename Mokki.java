@@ -5,8 +5,8 @@ public class Mokki {
     String tila;
     double vuokrahinta;
 
-    public Mokki(String id, String name, Osoite osoite, String tila, double vuokrahinta) {
-        this.id = Integer.parseInt(id);
+    public Mokki(int id, String name, Osoite osoite, String tila, double vuokrahinta) {
+        this.id = id;
         this.name = name;
         this.osoite = osoite;
         this.tila = tila;
