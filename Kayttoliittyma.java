@@ -16,7 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 
-public class Kauttoliittyma extends Application {
+public class Kayttoliittyma extends Application {
     public void start(Stage primarystage) {
         //POP UP IKKUNA
         VBox alku = new VBox(15);
