@@ -134,14 +134,14 @@ public class Kayttoliittyma extends Application {
         varausTable.setStyle("-fx-background-color: white; -fx-border-color: gray;");
         TableColumn<Varaus, Integer> varausIdCol = new TableColumn<>("id");
         varausIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        TableColumn<Varaus, Integer> asiakasIdCol = new TableColumn<>("asiakas");
-        asiakasIdCol.setCellValueFactory(new PropertyValueFactory<>("asiakas_id"));
-        TableColumn<Varaus, Integer> mokkiIdCol = new TableColumn<>("mökki");
-        mokkiIdCol.setCellValueFactory(new PropertyValueFactory<>("mökki_id"));
-        TableColumn<Varaus, Integer> laskuIdCol = new TableColumn<>("lasku");
-        laskuIdCol.setCellValueFactory(new PropertyValueFactory<>("lasku_id"));
+        TableColumn<Varaus, Integer> asiakasCol = new TableColumn<>("asiakas");
+        asiakasCol.setCellValueFactory(new PropertyValueFactory<>("asiakas_id"));
+        TableColumn<Varaus, Integer> mokkiCol = new TableColumn<>("mökki");
+        mokkiCol.setCellValueFactory(new PropertyValueFactory<>("mökki_id"));
+        TableColumn<Varaus, Integer> laskuCol = new TableColumn<>("lasku");
+        laskuCol.setCellValueFactory(new PropertyValueFactory<>("lasku_id"));
 
-        varausTable.getColumns().setAll(varausIdCol, asiakasIdCol,mokkiIdCol,laskuIdCol);
+        varausTable.getColumns().setAll(varausIdCol, asiakasCol,mokkiCol,laskuCol);
         varausVbox.getChildren().addAll(varausTable);
         paneeli.setCenter(varausVbox);
 
@@ -316,13 +316,32 @@ public class Kayttoliittyma extends Application {
         TextField varauksetKentta = new TextField();
         asiakasGrid.add(varauksetKentta, 3, 3);
 
+        //Asiakas TableView
+        ObservableList<Asiakas> asiakkaat = FXCollections.observableArrayList();
+        TableView<Asiakas> asiakasTable = new TableView<>(asiakkaat);
+        asiakasTable.setPrefHeight(400);
+        asiakasTable.setPrefWidth(200);
+        asiakasTable.setStyle("-fx-background-color: white; -fx-border-color: gray;");
+        TableColumn<Asiakas, Integer> asiakasIdCol = new TableColumn<>("id");
+        asiakasIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<Asiakas, String> asiakasNimiCol = new TableColumn<>("nimi");
+        asiakasNimiCol.setCellValueFactory(new PropertyValueFactory<>("nimi"));
+        TableColumn<Asiakas, String> asiakasSpostiCol = new TableColumn<>("sähköposti");
+        asiakasSpostiCol.setCellValueFactory(new PropertyValueFactory<>("sahkoposti"));
+        TableColumn<Asiakas, String> puhCol = new TableColumn<>("puhelinnumero");
+        puhCol.setCellValueFactory(new PropertyValueFactory<>("puhelinnumero"));
+        TableColumn<Asiakas, String> asiakasOsoiteCol = new TableColumn<>("osoite");
+        asiakasOsoiteCol.setCellValueFactory(new PropertyValueFactory<>("osoite"));
+
+        asiakasTable.getColumns().setAll(asiakasIdCol, asiakasNimiCol,asiakasSpostiCol,puhCol,asiakasOsoiteCol);
+
         //tallenna ja peruuta - nappi
         HBox riviButtoneille3 = new HBox(30);
         Button btnTallenna3 = new Button("Tallenna");
         Button btnPeruuta3 = new Button("Peruuta");
         riviButtoneille3.getChildren().addAll(btnTallenna3, btnPeruuta3);
         riviButtoneille3.setAlignment(Pos.CENTER);
-        asiakasVbox.getChildren().addAll(asiakasOtsikko, asiakasGrid, riviButtoneille3);
+        asiakasVbox.getChildren().addAll(asiakasOtsikko, asiakasGrid, riviButtoneille3, asiakasTable);
         paneeli.setCenter(asiakasVbox);
 
         //tapahtumankäsittelijä tallenna buttonille
