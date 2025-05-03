@@ -125,6 +125,24 @@ public class Kauttoliittyma extends Application {
         riviButtoneille1.getChildren().addAll(btnTallenna1, btnPeruuta1);
         riviButtoneille1.setAlignment(Pos.CENTER);
         varausVbox.getChildren().addAll(varausOtsikko, varausGrid, riviButtoneille1);
+
+        //Varaus TableView
+        ObservableList<Varaus> varaukset = FXCollections.observableArrayList();
+        TableView<Varaus> varausTable = new TableView<>(varaukset);
+        varausTable.setPrefHeight(400);
+        varausTable.setPrefWidth(200);
+        varausTable.setStyle("-fx-background-color: white; -fx-border-color: gray;");
+        TableColumn<Varaus, Integer> varausIdCol = new TableColumn<>("id");
+        varausIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<Varaus, Integer> asiakasIdCol = new TableColumn<>("asiakas");
+        asiakasIdCol.setCellValueFactory(new PropertyValueFactory<>("asiakas_id"));
+        TableColumn<Varaus, Integer> mokkiIdCol = new TableColumn<>("mökki");
+        mokkiIdCol.setCellValueFactory(new PropertyValueFactory<>("mökki_id"));
+        TableColumn<Varaus, Integer> laskuIdCol = new TableColumn<>("lasku");
+        laskuIdCol.setCellValueFactory(new PropertyValueFactory<>("lasku_id"));
+
+        varausTable.getColumns().setAll(varausIdCol, asiakasIdCol,mokkiIdCol,laskuIdCol);
+        varausVbox.getChildren().addAll(varausTable);
         paneeli.setCenter(varausVbox);
 
         //tapahtumankäsittelijä tallenna buttonille
