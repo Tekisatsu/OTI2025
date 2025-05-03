@@ -199,7 +199,8 @@ public class Kauttoliittyma extends Application {
         riviButtoneille2.getChildren().addAll(btnTallenna2, btnPeruuta2);
         riviButtoneille2.setAlignment(Pos.CENTER_LEFT);
 
-        //testidataa:
+        // testidataa:
+        // POISTA KUN EI TARVITA
         Osoite o1 = new Osoite("Testikatu 6", "Helsinki", "Suomi", 1000);
         Osoite o2 = new Osoite("Osoitetie 15", "Oulu", "Suomi", 4444);
         Osoite o3 = new Osoite("Kauppakatu 22", "Kuopio", "Suomi", 7050);
@@ -208,7 +209,6 @@ public class Kauttoliittyma extends Application {
         Mokki m3 = new Mokki(3,"Koomökki",o3,"Tyhjä",120.0);
 
         mokkiVbox.getChildren().addAll(mokitOtsikko,mokkiGrid,riviButtoneille2);
-
 
         ObservableList<Mokki> mokit = FXCollections.observableArrayList(m1,m2,m3);
         TableView<Mokki> mokkiTable = new TableView<>(mokit);
@@ -219,8 +219,12 @@ public class Kauttoliittyma extends Application {
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         TableColumn<Mokki, String> nameCol = new TableColumn<>("nimi");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        TableColumn<Mokki, String> osoiteCol = new TableColumn<>("osoite");
+        osoiteCol.setCellValueFactory(new PropertyValueFactory<>("osoite"));
+        TableColumn<Mokki, String> vuokrahintaCol = new TableColumn<>("hinta");
+        vuokrahintaCol.setCellValueFactory(new PropertyValueFactory<>("vuokrahinta"));
 
-        mokkiTable.getColumns().setAll(idCol, nameCol);
+        mokkiTable.getColumns().setAll(idCol, nameCol,osoiteCol,vuokrahintaCol);
 
         mokkiVbox.getChildren().addAll(mokkiTable);
         mokkiPohja.getChildren().addAll(mokkiVbox);

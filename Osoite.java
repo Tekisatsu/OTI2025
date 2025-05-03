@@ -45,11 +45,6 @@ public class Osoite {
 
     @Override
     public String toString() {
-        return "Osoite{" +
-                "osoite='" + osoite + '\'' +
-                ", kaupunki='" + kaupunki + '\'' +
-                ", maa='" + maa + '\'' +
-                ", zip=" + zip +
-                '}';
+        return ""+osoite+", "+kaupunki+", "+zip+", "+maa;
     }
 }
