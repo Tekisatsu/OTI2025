@@ -5,6 +5,13 @@ public class Mokki {
     String tila;
     double vuokrahinta;
 
+    public Mokki() {
+        this.id = 0;
+        this.name = "";
+        this.osoite = new Osoite();
+        this.tila = "";
+        this.vuokrahinta = 0;
+    }
     public Mokki(int id, String name, Osoite osoite, String tila, double vuokrahinta) {
         this.id = id;
         this.name = name;

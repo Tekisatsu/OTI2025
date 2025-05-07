@@ -19,8 +19,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-
 public class Kayttoliittyma extends Application {
+    TietokantaYhteysMokki tietokantaYhteysMokki = new TietokantaYhteysMokki();
     public void start(Stage primarystage) {
         //POP UP IKKUNA
         VBox alku = new VBox(15);
@@ -221,18 +221,9 @@ public class Kayttoliittyma extends Application {
         riviButtoneille2.getChildren().addAll(btnTallenna2, btnPeruuta2);
         riviButtoneille2.setAlignment(Pos.CENTER_LEFT);
 
-        // testidataa:
-        // POISTA KUN EI TARVITA
-        Osoite o1 = new Osoite("Testikatu 6", "Helsinki", "Suomi", 1000);
-        Osoite o2 = new Osoite("Osoitetie 15", "Oulu", "Suomi", 4444);
-        Osoite o3 = new Osoite("Kauppakatu 22", "Kuopio", "Suomi", 7050);
-        Mokki m1 = new Mokki(1,"Testimökki",o1,"Tyhjä",60.0);
-        Mokki m2 = new Mokki(2,"Tokamökki",o2,"Varattu",800.0);
-        Mokki m3 = new Mokki(3,"Koomökki",o3,"Tyhjä",120.0);
-
         mokkiVbox.getChildren().addAll(mokitOtsikko,mokkiGrid,riviButtoneille2);
 
-        ObservableList<Mokki> mokit = FXCollections.observableArrayList(m1,m2,m3);
+        ObservableList<Mokki> mokit = FXCollections.observableArrayList(tietokantaYhteysMokki.readAllMokit());
         TableView<Mokki> mokkiTable = new TableView<>(mokit);
         mokkiTable.setPrefHeight(400);
         mokkiTable.setPrefWidth(200);

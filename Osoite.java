@@ -5,6 +5,13 @@ public class Osoite {
     String maa;
     int zip;
 
+    public Osoite() {
+        osoite = "";
+        kaupunki = "";
+        maa = "";
+        zip = 0;
+    }
+
     public Osoite(String osoite, String kaupunki, String maa, int zip) {
         this.osoite = osoite;
         this.kaupunki = kaupunki;
