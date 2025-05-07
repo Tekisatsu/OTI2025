@@ -15,6 +15,10 @@ import javafx.scene.text.Text;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 
 public class Kayttoliittyma extends Application {
     public void start(Stage primarystage) {
@@ -464,6 +468,7 @@ public class Kayttoliittyma extends Application {
         });
         menuRaportointi.setOnAction(e -> {
             paneeli.setCenter(luoRaportointiNakyma());
+        });
 
         //käyttöliittymän näyttö on aluksi tyhjä
         //Mitä tähän keksisi?
