@@ -360,89 +360,12 @@ public class Kayttoliittyma extends Application {
         //------------------------------------------------------------------------------------
         //LASKU -entiteetti
 
-        VBox laskuVbox = new VBox();
-        laskuVbox.setStyle("-fx-background-color: lightgray;");
-        laskuVbox.setAlignment(Pos.CENTER);
-        laskuVbox.setPadding(new Insets(30));
-        laskuVbox.setSpacing(20);
-
-        laskuVbox.setMaxWidth(650);
-        laskuVbox.setMaxHeight(650);
-        laskuVbox.setPrefHeight(650);
-        laskuVbox.setPrefWidth(650);
-
-        Label laskuOtsikko = new Label("Laskut");
-        laskuOtsikko.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-
-        GridPane laskuGrid = new GridPane();
-        laskuGrid.setHgap(20);
-        laskuGrid.setVgap(20);
-        laskuGrid.setPadding(new Insets(20));
-        laskuGrid.setAlignment(Pos.CENTER);
-
-        laskuGrid.add(new Label("ID:"), 0, 0);
-        TextField laskuIdKentta = new TextField();
-        laskuGrid.add(laskuIdKentta, 1, 0);
-
-        laskuGrid.add(new Label("Saaja:"), 0, 1);
-        TextField saajaKentta = new TextField();
-        laskuGrid.add(saajaKentta, 1, 1);
-
-        laskuGrid.add(new Label("Maksaja:"), 0, 2);
-        TextField maksajaKentta = new TextField();
-        laskuGrid.add(maksajaKentta, 1, 2);
-
-        laskuGrid.add(new Label("Määrä:"), 0, 3);
-        TextField maaraKentta = new TextField();
-        laskuGrid.add(maaraKentta, 1, 3);
-
-        laskuGrid.add(new Label("Viitenumero:"), 2, 0);
-        TextField viitenumeroKentta = new TextField();
-        laskuGrid.add(viitenumeroKentta, 3, 0);
-
-        laskuGrid.add(new Label("Eräpäivä:"), 2, 1);
-        TextField erapaivaKentta = new TextField();
-        laskuGrid.add(erapaivaKentta, 3, 1);
-
-        laskuGrid.add(new Label("Y-tunnus:"), 2, 2);
-        TextField ytunnusKentta = new TextField();
-        laskuGrid.add(ytunnusKentta, 3, 2);
-
-        laskuGrid.add(new Label("ALV-prosentti:"), 2, 3);
-        TextField alvKentta = new TextField();
-        laskuGrid.add(alvKentta, 3, 3);
-
-        //tallenna ja peruuta nappi
-        HBox riviButtoneille4 = new HBox(30);
-        Button btnTallenna4 = new Button("Tallenna");
-        Button btnPeruuta4 = new Button("Peruuta");
-        riviButtoneille4.getChildren().addAll(btnTallenna4, btnPeruuta4);
-        riviButtoneille4.setAlignment(Pos.CENTER);
-        laskuVbox.getChildren().addAll(laskuOtsikko,laskuGrid, riviButtoneille4);
-        paneeli.setCenter(laskuVbox);
-
-        //tapahtumankäsittelijä tallenna buttonille
-        btnTallenna4.setOnAction(ActionEvent -> {
-            try {
-                int id = Integer.parseInt(laskuIdKentta.getText());
-                String saaja = saajaKentta.getText();
-                String maksaja = maksajaKentta.getText();
-                double maara = Double.parseDouble(maaraKentta.getText());
-                int viitenumero = Integer.parseInt(viitenumeroKentta.getText());
-                //eräpäivä
-                //ytunnus intiksi?
-                double alvprosentti = Double.parseDouble(alvKentta.getText());
-
-            } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-
+        // Tälle luotu oma metodi alempana
+        
         //----------------------------------------------------------------------------------------
         //MAJOITUKSEN RAPORTOINTI -entiteetti
 
-        // tälle luotu oma metodi alempana
+        // Tälle luotu oma metodi alempana
 
         //----------------------------------------------------------------------------------------
         //vaihdetaan näkymiä menubarista klikkaamalla
@@ -453,7 +376,7 @@ public class Kayttoliittyma extends Application {
             paneeli.setCenter(mokkiVbox);
         });
         menuLasku.setOnAction(e -> {
-            paneeli.setCenter(laskuVbox);
+            paneeli.setCenter(luoLaskuNakyma());
         });
         menuAsiakas.setOnAction(e -> {
             paneeli.setCenter(asiakasVbox);
@@ -474,6 +397,187 @@ public class Kayttoliittyma extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    // laskunäkymän luonti
+    public VBox luoLaskuNakyma() {
+
+        VBox laskuVbox = new VBox(20);
+        laskuVbox.setStyle("-fx-background-color: lightgray;");
+        laskuVbox.setAlignment(Pos.CENTER);
+        laskuVbox.setPadding(new Insets(30));
+
+        Label laskuOtsikko = new Label("Lasku");
+        laskuOtsikko.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+
+        // Luodaan ja asetetaan tekstikentät
+        GridPane laskuGrid = new GridPane();
+        laskuGrid.setHgap(20);
+        laskuGrid.setVgap(20);
+        laskuGrid.setPadding(new Insets(20));
+        laskuGrid.setAlignment(Pos.CENTER);
+
+        laskuGrid.add(new Label("Saaja:"), 0, 1);
+        TextField saajaKentta = new TextField();
+        laskuGrid.add(saajaKentta, 1, 1);
+
+        laskuGrid.add(new Label("Maksaja:"), 0, 2);
+        TextField maksajaKentta = new TextField();
+        laskuGrid.add(maksajaKentta, 1, 2);
+
+        laskuGrid.add(new Label("Määrä:"), 0, 3);
+        TextField maaraKentta = new TextField();
+        laskuGrid.add(maaraKentta, 1, 3);
+
+        laskuGrid.add(new Label("Viitenumero:"), 2, 0);
+        TextField viitenumeroKentta = new TextField();
+        laskuGrid.add(viitenumeroKentta, 3, 0);
+
+        laskuGrid.add(new Label("Eräpäivä:"), 2, 1);
+        DatePicker erapaivaKentta = new DatePicker();
+        laskuGrid.add(erapaivaKentta, 3, 1);
+
+        laskuGrid.add(new Label("Y-tunnus:"), 2, 2);
+        TextField ytunnusKentta = new TextField();
+        laskuGrid.add(ytunnusKentta, 3, 2);
+
+        laskuGrid.add(new Label("ALV-prosentti:"), 2, 3);
+        TextField alvKentta = new TextField();
+        laskuGrid.add(alvKentta, 3, 3);
+
+        // Painikkeet tallennukselle ja poistamiselle
+        HBox riviButtoneille4 = new HBox(30);
+        Button btnTallenna4 = new Button("Tallenna");
+        Button btnPoista4 = new Button("Poista");
+        riviButtoneille4.getChildren().addAll(btnTallenna4, btnPoista4);
+        riviButtoneille4.setAlignment(Pos.CENTER);
+
+        // Taulukko aikaisempien laskujen tarkastelulle
+        TableView<Lasku> laskuTable = new TableView<>();
+        laskuTable.setPrefSize(700, 400);
+
+        // Taulukon sarakkeet
+        TableColumn<Lasku, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn<Lasku, String> viiteCol = new TableColumn<>("Viitenumero");
+        viiteCol.setCellValueFactory(new PropertyValueFactory<>("viitenumero"));
+
+        TableColumn<Lasku, LocalDate> eraCol = new TableColumn<>("Eräpäivä");
+        eraCol.setCellValueFactory(new PropertyValueFactory<>("erapaiva"));
+
+        TableColumn<Lasku, String> maksajaCol = new TableColumn<>("Maksaja");
+        maksajaCol.setCellValueFactory(new PropertyValueFactory<>("maksaja"));
+
+        TableColumn<Lasku, String> saajaCol = new TableColumn<>("Saaja");
+        saajaCol.setCellValueFactory(new PropertyValueFactory<>("saaja"));
+
+        TableColumn<Lasku, String> ytunnusCol = new TableColumn<>("Y-tunnus");
+        ytunnusCol.setCellValueFactory(new PropertyValueFactory<>("ytunnus"));
+
+        TableColumn<Lasku, Double> prosenttiCol = new TableColumn<>("Alennusveroprosentti");
+        prosenttiCol.setCellValueFactory(new PropertyValueFactory<>("alvprosentti"));
+
+        TableColumn<Lasku, Double> maaraCol = new TableColumn<>("Määrä");
+        maaraCol.setCellValueFactory(new PropertyValueFactory<>("maara"));
+
+        laskuTable.getColumns().addAll(idCol, viiteCol, eraCol, maksajaCol, saajaCol, ytunnusCol, prosenttiCol, maaraCol);
+
+        // Luetaan tietokanta aina kun näkymä alustetaan
+        ObservableList<Lasku> laskuData = FXCollections.observableArrayList(new TietokantaYhteysLasku().getAllLaskut());
+        laskuTable.setItems(laskuData);
+
+        // Korostamalla laskuja saadaan täytettyä tekstikentät valmiiksi
+        laskuTable.getSelectionModel().selectedItemProperty().addListener((obs, vanha, uusi) -> {
+            if (uusi != null) {
+                viitenumeroKentta.setText(uusi.getViitenumero());
+                erapaivaKentta.setValue(uusi.getErapaiva());
+                maksajaKentta.setText(uusi.getMaksaja());
+                saajaKentta.setText(uusi.getSaaja());
+                ytunnusKentta.setText(uusi.getYtunnus());
+                alvKentta.setText(String.valueOf(uusi.getAlvprosentti()));
+                maaraKentta.setText(String.valueOf(uusi.getMaara()));
+            }
+        });
+
+        // Tapahtumankäsittelijä tallenna buttonille
+        btnTallenna4.setOnAction(e -> {
+            Lasku valittu = laskuTable.getSelectionModel().getSelectedItem();
+            try {
+                String viitenumero = viitenumeroKentta.getText();
+                LocalDate erapaiva = erapaivaKentta.getValue();
+                String maksaja = maksajaKentta.getText();
+                String saaja = saajaKentta.getText();
+                String ytunnus = ytunnusKentta.getText();
+                double alv = Double.parseDouble(alvKentta.getText());
+                double maara = Double.parseDouble(maaraKentta.getText());
+
+                TietokantaYhteysLasku yhteys = new TietokantaYhteysLasku();
+
+                if (valittu != null) {
+                    // Päivitä olemassa oleva
+                    valittu.setViitenumero(viitenumero);
+                    valittu.setErapaiva(erapaiva);
+                    valittu.setMaksaja(maksaja);
+                    valittu.setSaaja(saaja);
+                    valittu.setYtunnus(ytunnus);
+                    valittu.setAlvprosentti(alv);
+                    valittu.setMaara(maara);
+
+                    yhteys.updateLasku(valittu);
+                } else {
+                    // Luo uusi lasku (ID generoituu automaattisesti)
+                    Lasku uusi = new Lasku("0", viitenumero, erapaiva, maksaja, saaja, ytunnus, String.valueOf(alv), String.valueOf(maara));
+                    yhteys.createLasku(uusi);
+                }
+
+                // Päivitä taulukko
+                laskuTable.setItems(FXCollections.observableArrayList(yhteys.getAllLaskut()));
+                laskuTable.getSelectionModel().clearSelection();
+
+                // Tyhjennä kentät
+                viitenumeroKentta.clear();
+                erapaivaKentta.setValue(null);
+                maksajaKentta.clear();
+                saajaKentta.clear();
+                ytunnusKentta.clear();
+                alvKentta.clear();
+                maaraKentta.clear();
+
+            } catch (Exception ex) {
+                System.err.println("Virhe tallennuksessa: " + ex.getMessage());
+            }
+        });
+
+        // Laskun poistaminen taulukosta
+        btnPoista4.setOnAction(e -> {
+            Lasku valittu = laskuTable.getSelectionModel().getSelectedItem();
+
+            if (valittu != null) {
+                int id = valittu.getId();
+                TietokantaYhteysLasku yhteys = new TietokantaYhteysLasku();
+                yhteys.deleteLasku(id);
+
+                // Päivitä taulukko
+                laskuTable.setItems(FXCollections.observableArrayList(yhteys.getAllLaskut()));
+                laskuTable.getSelectionModel().clearSelection();
+
+                // Tyhjennä kentät
+                viitenumeroKentta.clear();
+                erapaivaKentta.setValue(null);
+                maksajaKentta.clear();
+                saajaKentta.clear();
+                ytunnusKentta.clear();
+                alvKentta.clear();
+                maaraKentta.clear();
+
+            } else {
+                System.out.println("Valitse poistettava lasku taulukosta.");
+            }
+        });
+
+        laskuVbox.getChildren().addAll(laskuOtsikko, laskuGrid, riviButtoneille4, laskuTable);
+        return laskuVbox;
     }
 
     // raportointinäkymän luonti
