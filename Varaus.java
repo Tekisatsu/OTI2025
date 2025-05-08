@@ -5,14 +5,16 @@ public class Varaus {
     int asiakas_id;
     int mokki_id;
     int lasku_id;
+    int henkilomaara;
     LocalDate alkamispaivamaara;
     LocalDate paattumispaivamaara;
 
-    public Varaus(int id, int asiakas_id, int mokki_id, int lasku_id, LocalDate alkamispaivamaara, LocalDate paattumispaivamaara) {
+    public Varaus(int id, int asiakas_id, int mokki_id, int lasku_id, int henkilomaara,LocalDate alkamispaivamaara, LocalDate paattumispaivamaara) {
         this.id = id;
         this.asiakas_id = asiakas_id;
         this.mokki_id = mokki_id;
         this.lasku_id = lasku_id;
+        this.henkilomaara = henkilomaara;
         this.alkamispaivamaara = alkamispaivamaara;
         this.paattumispaivamaara = paattumispaivamaara;
     }
