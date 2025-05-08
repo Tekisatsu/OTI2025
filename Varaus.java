@@ -51,6 +51,14 @@ public class Varaus {
         this.lasku_id = lasku_id;
     }
 
+    public int getHenkilomaara() {
+        return henkilomaara;
+    }
+
+    public void setHenkilomaara(int henkilomaara) {
+        this.henkilomaara = henkilomaara;
+    }
+
     public LocalDate getAlkamispaivamaara() {
         return alkamispaivamaara;
     }

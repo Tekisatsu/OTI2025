@@ -13,14 +13,15 @@ public class TietokantaYhteysVaraus {
 
     // luo varaus
     public void createVaraus(Varaus varaus) {
-        String sql = "INSERT INTO VARAUS (Lasku_ID, Mokki_ID, Asiakas_ID, Aloituspaivamaara, Paattymispaivamaara) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO VARAUS (Lasku_ID, Mokki_ID, Asiakas_ID,henkilomaara,Aloituspaivamaara, Paattymispaivamaara) " +
+                "VALUES (?, ?, ?, ?, ?,?,)";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
             stmt.setInt(1, varaus.getLasku_id());
             stmt.setInt(2, varaus.getMokki_id());
             stmt.setInt(3, varaus.getAsiakas_id());
-            stmt.setDate(4, Date.valueOf(varaus.getAlkamispaivamaara()));
-            stmt.setDate(5, Date.valueOf(varaus.getPaattumispaivamaara()));
+            stmt.setInt(4, varaus.henkilomaara);
+            stmt.setDate(5, Date.valueOf(varaus.getAlkamispaivamaara()));
+            stmt.setDate(6, Date.valueOf(varaus.getPaattumispaivamaara()));
             stmt.executeUpdate();
             System.out.println("Varaus luotu mökki ID:lle " + varaus.getMokki_id());
         } catch (SQLException e) {
@@ -40,6 +41,7 @@ public class TietokantaYhteysVaraus {
                         rs.getInt("Asiakas_ID"),
                         rs.getInt("Mokki_ID"),
                         rs.getInt("Lasku_ID"),
+                        rs.getInt("Henkilomaara"),
                         rs.getDate("Aloituspaivamaara").toLocalDate(),
                         rs.getDate("Paattymispaivamaara").toLocalDate()
                 );
@@ -61,6 +63,7 @@ public class TietokantaYhteysVaraus {
                         rs.getInt("Asiakas_ID"),
                         rs.getInt("Mokki_ID"),
                         rs.getInt("Lasku_ID"),
+                        rs.getInt("Henkilomaara"),
                         rs.getDate("Aloituspaivamaara").toLocalDate(),
                         rs.getDate("Paattymispaivamaara").toLocalDate()
                 );
