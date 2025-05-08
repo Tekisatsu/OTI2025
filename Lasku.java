@@ -1,19 +1,19 @@
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Lasku {
 
     private int id;
-    private int viitenumero;
-    private Date erapaiva;
+    private String viitenumero;
+    private LocalDate erapaiva;
     private String maksaja;
     private String saaja;
     private String ytunnus;
     private double alvprosentti;
     private double maara;
 
-    public Lasku(String id, String viitenumero, Date erapaiva, String maksaja, String saaja, String ytunnus, String alvprosentti, String maara) {
+    public Lasku(String id, String viitenumero, LocalDate erapaiva, String maksaja, String saaja, String ytunnus, String alvprosentti, String maara) {
         this.id = Integer.parseInt(id);
-        this.viitenumero = Integer.parseInt(viitenumero);
+        this.viitenumero = viitenumero;
         this.erapaiva = erapaiva;
         this.maksaja = maksaja;
         this.saaja = saaja;
@@ -30,19 +30,19 @@ public class Lasku {
         this.id = id;
     }
 
-    public int getViitenumero() {
+    public String getViitenumero() {
         return viitenumero;
     }
 
-    public void setViitenumero(int viitenumero) {
+    public void setViitenumero(String viitenumero) {
         this.viitenumero = viitenumero;
     }
 
-    public Date getErapaiva() {
+    public LocalDate getErapaiva() {
         return erapaiva;
     }
 
-    public void setErapaiva(Date erapaiva) {
+    public void setErapaiva(LocalDate erapaiva) {
         this.erapaiva = erapaiva;
     }
 
