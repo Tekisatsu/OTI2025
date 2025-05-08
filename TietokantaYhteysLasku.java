@@ -13,11 +13,11 @@ public class TietokantaYhteysLasku {
 
     // luo lasku
     public void createLasku(Lasku lasku) {
-        String sql = "INSERT INTO LASKU (Viitenumero, Erapaiva, Maksaja, Saaja, Ytunnus, ALV_prosentti, Maara) " +
+        String sql = "INSERT INTO LASKU (Viitenumero, Erapaiva, Maksaja, Saaja, Y_tunnus, ALV_prosentti, Maara) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
-            stmt.setInt(1, lasku.getViitenumero());
-            stmt.setDate(2, new java.sql.Date(lasku.getErapaiva().getTime()));
+            stmt.setString(1, lasku.getViitenumero());
+            stmt.setDate(2, java.sql.Date.valueOf(lasku.getErapaiva()));
             stmt.setString(3, lasku.getMaksaja());
             stmt.setString(4, lasku.getSaaja());
             stmt.setString(5, lasku.getYtunnus());
@@ -39,11 +39,11 @@ public class TietokantaYhteysLasku {
             if (rs.next()) {
                 return new Lasku(
                         String.valueOf(rs.getInt("ID")),
-                        String.valueOf(rs.getInt("Viitenumero")),
-                        rs.getDate("Erapaiva"),
+                        rs.getString("Viitenumero"),
+                        rs.getDate("Erapaiva").toLocalDate(),
                         rs.getString("Maksaja"),
                         rs.getString("Saaja"),
-                        rs.getString("Ytunnus"),
+                        rs.getString("Y_tunnus"),
                         String.valueOf(rs.getDouble("ALV_prosentti")),
                         String.valueOf(rs.getDouble("Maara"))
                 );
@@ -62,11 +62,11 @@ public class TietokantaYhteysLasku {
             while (rs.next()) {
                 Lasku lasku = new Lasku(
                         String.valueOf(rs.getInt("ID")),
-                        String.valueOf(rs.getInt("Viitenumero")),
-                        rs.getDate("Erapaiva"),
+                        rs.getString("Viitenumero"),
+                        rs.getDate("Erapaiva").toLocalDate(),
                         rs.getString("Maksaja"),
                         rs.getString("Saaja"),
-                        rs.getString("Ytunnus"),
+                        rs.getString("Y_tunnus"),
                         String.valueOf(rs.getDouble("ALV_prosentti")),
                         String.valueOf(rs.getDouble("Maara"))
                 );
@@ -80,11 +80,11 @@ public class TietokantaYhteysLasku {
 
     // päivitä lasku
     public void updateLasku(Lasku lasku) {
-        String sql = "UPDATE LASKU SET Viitenumero = ?, Erapaiva = ?, Maksaja = ?, Saaja = ?, Ytunnus = ?, " +
+        String sql = "UPDATE LASKU SET Viitenumero = ?, Erapaiva = ?, Maksaja = ?, Saaja = ?, Y_tunnus = ?, " +
                 "ALV_prosentti = ?, Maara = ? WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
-            stmt.setInt(1, lasku.getViitenumero());
-            stmt.setDate(2, new java.sql.Date(lasku.getErapaiva().getTime()));
+            stmt.setString(1, lasku.getViitenumero());
+            stmt.setDate(2, java.sql.Date.valueOf(lasku.getErapaiva()));
             stmt.setString(3, lasku.getMaksaja());
             stmt.setString(4, lasku.getSaaja());
             stmt.setString(5, lasku.getYtunnus());
