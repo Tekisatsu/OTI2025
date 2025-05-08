@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 public class Kayttoliittyma extends Application {
     TietokantaYhteysMokki tietokantaYhteysMokki = new TietokantaYhteysMokki();
+    TietokantaYhteysAsiakas tietokantaYhteysAsiakas = new TietokantaYhteysAsiakas();
     public void start(Stage primarystage) {
         //POP UP IKKUNA
         VBox alku = new VBox(15);
@@ -312,7 +313,7 @@ public class Kayttoliittyma extends Application {
         asiakasGrid.add(varauksetKentta, 3, 3);
 
         //Asiakas TableView
-        ObservableList<Asiakas> asiakkaat = FXCollections.observableArrayList();
+        ObservableList<Asiakas> asiakkaat = FXCollections.observableArrayList(tietokantaYhteysAsiakas.getAllAsiakkaat());
         TableView<Asiakas> asiakasTable = new TableView<>(asiakkaat);
         asiakasTable.setPrefHeight(400);
         asiakasTable.setPrefWidth(200);
