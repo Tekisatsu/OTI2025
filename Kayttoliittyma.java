@@ -896,12 +896,6 @@ public class Kayttoliittyma extends Application {
                 osoiteTable.setItems(FXCollections.observableArrayList(yhteys.getAllOsoitteet()));
                 osoiteTable.getSelectionModel().clearSelection();
 
-                // Tyhjennetään kentät
-                katuKentta.clear();
-                kaupunkiKentta.clear();
-                maaKentta.clear();
-                postinumeroKentta.clear();
-
             } catch (Exception ex) {
                 System.err.println("Virhe lisättäessä: " + ex.getMessage());
             }
