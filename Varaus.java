@@ -81,17 +81,18 @@ public class Varaus {
         return paattumispaivamaara;
     }
 
+    public void setPaattumispaivamaara(LocalDate paattumispaivamaara) {
+        this.paattumispaivamaara = paattumispaivamaara;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         Varaus varaus = (Varaus) o;
-        return Objects.equals(alkamispaivamaara, varaus.alkamispaivamaara) && Objects.equals(paattumispaivamaara, varaus.paattumispaivamaara);
+        return Objects.equals(alkamispaivamaara, varaus.alkamispaivamaara) && Objects.equals(paattumispaivamaara, varaus.paattumispaivamaara) && Objects.equals(this.mokki_id,((Varaus) o).mokki_id);
     }
 
-    public void setPaattumispaivamaara(LocalDate paattumispaivamaara) {
-        this.paattumispaivamaara = paattumispaivamaara;
-    }
 
     @Override
     public String toString() {
