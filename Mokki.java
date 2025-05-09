@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Mokki {
     int id;
     String name;
@@ -58,6 +60,14 @@ public class Mokki {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Mokki mokki = (Mokki) o;
+        return Double.compare(vuokrahinta, mokki.vuokrahinta) == 0 && Objects.equals(name, mokki.name) && Objects.equals(osoite, mokki.osoite) && Objects.equals(tila, mokki.tila);
     }
 
     @Override

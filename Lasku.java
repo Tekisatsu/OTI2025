@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Lasku {
 
@@ -84,6 +85,14 @@ public class Lasku {
 
     public void setMaara(double maara) {
         this.maara = maara;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Lasku lasku = (Lasku) o;
+        return Double.compare(alvprosentti, lasku.alvprosentti) == 0 && Double.compare(maara, lasku.maara) == 0 && Objects.equals(viitenumero, lasku.viitenumero) && Objects.equals(erapaiva, lasku.erapaiva) && Objects.equals(maksaja, lasku.maksaja) && Objects.equals(saaja, lasku.saaja) && Objects.equals(ytunnus, lasku.ytunnus);
     }
 
     @Override

@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Asiakas {
 
     private int id;
@@ -60,6 +62,14 @@ public class Asiakas {
 
     public void setOsoite(Osoite osoite) {
         this.osoite = osoite;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Asiakas asiakas = (Asiakas) o;
+        return Objects.equals(nimi, asiakas.nimi) && Objects.equals(sahkoposti, asiakas.sahkoposti) && Objects.equals(puhelinnumero, asiakas.puhelinnumero) && Objects.equals(osoite, asiakas.osoite);
     }
 
     @Override

@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Varaus {
     int id;
@@ -78,6 +79,14 @@ public class Varaus {
 
     public LocalDate getPaattumispaivamaara() {
         return paattumispaivamaara;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Varaus varaus = (Varaus) o;
+        return Objects.equals(alkamispaivamaara, varaus.alkamispaivamaara) && Objects.equals(paattumispaivamaara, varaus.paattumispaivamaara);
     }
 
     public void setPaattumispaivamaara(LocalDate paattumispaivamaara) {

@@ -24,6 +24,7 @@ public class Kayttoliittyma extends Application {
     TietokantaYhteysMokki tietokantaYhteysMokki = new TietokantaYhteysMokki();
     TietokantaYhteysAsiakas tietokantaYhteysAsiakas = new TietokantaYhteysAsiakas();
     TietokantaYhteysVaraus tietokantaYhteysVaraus = new TietokantaYhteysVaraus();
+    TietokantaYhteysLasku tietokantaYhteysLasku = new TietokantaYhteysLasku();
     public void start(Stage primarystage) {
         //POP UP IKKUNA
         VBox alku = new VBox(15);
@@ -876,16 +877,62 @@ public class Kayttoliittyma extends Application {
         return raporttiVBox;
     }
     public ObservableList<VarausInfo> getVarausInfo(ObservableList<Varaus> list) {
-        TietokantaYhteysAsiakas a = new TietokantaYhteysAsiakas();
-        TietokantaYhteysMokki m = new TietokantaYhteysMokki();
-        TietokantaYhteysLasku l = new TietokantaYhteysLasku();
         ObservableList<VarausInfo> varausInfo = FXCollections.observableArrayList();
         for (Varaus varaus : list) {
-            Asiakas asi = a.getAsiakastiedot(varaus.asiakas_id);
-            Mokki mok = m.readMokki(varaus.mokki_id);
-            Lasku las = l.getLaskuID(varaus.lasku_id);
+            Asiakas asi = tietokantaYhteysAsiakas.getAsiakastiedot(varaus.asiakas_id);
+            Mokki mok = tietokantaYhteysMokki.readMokki(varaus.mokki_id);
+            Lasku las = tietokantaYhteysLasku.getLaskuID(varaus.lasku_id);
             varausInfo.add(new VarausInfo(varaus.id, asi, mok, las, varaus.henkilomaara, varaus.alkamispaivamaara,varaus.paattumispaivamaara));
         }
         return varausInfo;
+    }
+    public boolean alreadyExists(Object o) {
+        if (o instanceof Asiakas) {
+            List<Asiakas> a = tietokantaYhteysAsiakas.getAllAsiakkaat();
+            for (Asiakas asiakas : a) {
+                if (asiakas.equals(o)){
+                    return true;
+                }
+            }
+            return false;
+        }
+        if (o instanceof Mokki) {
+            List<Mokki> m = tietokantaYhteysMokki.readAllMokit();
+            for (Mokki mokki : m) {
+                if (mokki.equals(o)){
+                    return true;
+                }
+            }
+            return false;
+        }
+        if (o instanceof Lasku) {
+            List<Lasku> l = tietokantaYhteysLasku.getAllLaskut();
+            for (Lasku lasku : l) {
+                if (lasku.equals(o)){
+                    return true;
+                }
+            }
+            return false;
+        }
+        if (o instanceof Varaus) {
+            List<Varaus> v = tietokantaYhteysVaraus.getAllVaraukset();
+            for (Varaus varaus : v) {
+                if (varaus.equals(o)){
+                    return true;
+                }
+            }
+            return false;
+        }
+        if (o instanceof VarausInfo) {
+            ObservableList<Varaus> varauksetList = FXCollections.observableArrayList(tietokantaYhteysVaraus.getAllVaraukset());
+            ObservableList<VarausInfo> v = getVarausInfo(varauksetList);
+            for (VarausInfo varausInfo : v) {
+                if (varausInfo.equals(o)){
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
     }
 }
