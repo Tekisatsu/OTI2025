@@ -1,3 +1,5 @@
+package org.example.demo14;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -246,9 +248,10 @@ public class Kayttoliittyma extends Application {
 
         //tallenna ja peruuta -nappi
         HBox riviButtoneille2 = new HBox(30);
-        Button btnTallenna2 = new Button("Tallenna");
-        Button btnPeruuta2 = new Button("Peruuta");
-        riviButtoneille2.getChildren().addAll(btnTallenna2, btnPeruuta2);
+        Button btnLisaa2 = new Button("Lisää");
+        Button btnPaivita2 = new Button("Päivitä");
+        Button btnPoista2 = new Button("Poista");
+        riviButtoneille2.getChildren().addAll(btnLisaa2, btnPaivita2, btnPoista2);
         riviButtoneille2.setAlignment(Pos.CENTER_LEFT);
 
         mokkiVbox.getChildren().addAll(mokitOtsikko, mokkiGrid, riviButtoneille2);
@@ -268,14 +271,13 @@ public class Kayttoliittyma extends Application {
         vuokrahintaCol.setCellValueFactory(new PropertyValueFactory<>("vuokrahinta"));
 
         mokkiTable.getColumns().setAll(idCol, nameCol,osoiteCol,vuokrahintaCol);
-
         mokkiVbox.getChildren().addAll(mokkiTable);
 
         mokkiPohja.getChildren().addAll(mokkiVbox);
         paneeli.setCenter(mokkiPohja);
 
-        //tapahtumankäsittelijä tallenna napille
-        btnTallenna2.setOnAction(ActionEvent -> {
+        //tapahtumankäsittelijä lisää napille
+        btnLisaa2.setOnAction(ActionEvent -> {
             try {
                 int id = Integer.parseInt(mokkiIdKentta.getText());
                 String name = mokkiNimiKentta.getText();
@@ -283,32 +285,53 @@ public class Kayttoliittyma extends Application {
                 double vuokrahinta = Double.parseDouble(vuokrahintaKentta.getText());
                 //haetaan osoite ID:n perusteella
                 int osoiteId = Integer.parseInt(osoiteIdKentta.getText());
-                Osoite osoite = tietokantaYhteysMokki.getOsoite(osoiteId);
+                Osoite osoite = yhteys.getOsoite(osoiteId);
 
                 //olio johon kenttien arvot asetetaan
-                Mokki mokki = new Mokki();
-                mokki.setId(id);
-                mokki.setName(name);
-                mokki.setTila(tila);
-                mokki.setVuokrahinta(vuokrahinta);
-                mokki.setOsoite(osoite);
+                Mokki mokki = new Mokki(id, name, tila, vuokrahinta, osoite);
 
-                //tallennetaan mokki olio tietokantaan
-                tietokantaYhteysMokki.createMokki(mokki);
+                TietokantaYhteysMokki yhteys = new TietokantaYhteysMokki();
+                yhteys.createMokki(mokki);
 
-            } catch (NumberFormatException e) {
-                Alert virhe2 = new Alert(Alert.AlertType.WARNING, "Tarkista, että kentät ovat oikeassa muodossa.");
-                virhe2.show();
+                mokkiTable.setItems(FXCollections.observableArrayList(yhteys.readAllMokit()));
+                mokkiTable.getSelectionModel().clearSelection();
+            } catch (Exception ex) {
+                System.err.println("Virhe lisättäessä: " + ex.getMessage());
             }
         });
 
-        //tapahtumankäsittelijä peruuta napille
-        btnPeruuta2.setOnAction(e -> {
-            mokkiIdKentta.clear();
-            mokkiNimiKentta.clear();
-            mokkiTilaKentta.clear();
-            vuokrahintaKentta.clear();
-            osoiteIdKentta.clear();
+        //tapahtumankäsittelijä päivitä napille
+        btnPaivita2.setOnAction(e -> {
+            Mokki valittu = mokkiTable.getSelectionModel().getSelectedItem();
+            if (valittu != null) {
+                try {
+                    valittu.setId(Integer.parseInt(mokkiIdKentta.getText()));
+                    valittu.setName(mokkiNimiKentta.getText());
+                    valittu.setTila(mokkiTilaKentta.getText());
+                    valittu.setVuokrahinta(Double.parseDouble(vuokrahintaKentta.getText()));
+                    int osoiteId = Integer.parseInt(osoiteIdKentta.getText());
+                    valittu.setOsoiteId(osoiteId);
+
+                    TietokantaYhteysMokki yhteys = new TietokantaYhteysMokki();
+                    yhteys.updateMokki(valittu);
+
+                    mokkiTable.setItems(FXCollections.observableArrayList(yhteys.readAllMokit()));
+                    mokkiTable.getSelectionModel().clearSelection();
+
+                } catch (Exception ex) {
+                    System.err.println("Virhe päivitettäessä: " + ex.getMessage());
+                }
+            }
+        });
+
+        //tapahtumankäsittelijä poista napille
+        btnPoista2.setOnAction(e -> {
+            Mokki valittu = mokkiTable.getSelectionModel().getSelectedItem();
+            if (valittu != null) {
+                yhteys.deleteMokki(valittu.getId());
+                mokkiTable.setItems(FXCollections.observableArrayList(yhteys.readAllMokit()));
+                mokkiTable.getSelectionModel().clearSelection();
+            }
         });
 
         //------------------------------------------------------------------------------------------
@@ -383,7 +406,7 @@ public class Kayttoliittyma extends Application {
         riviButtoneille3.getChildren().addAll(btnTallenna3, btnPeruuta3);
         riviButtoneille3.setAlignment(Pos.CENTER_LEFT);
 
-        asiakasVbox.getChildren().addAll(asiakasOtsikko, asiakasGrid, riviButtoneille3, asiakasTable); 
+        asiakasVbox.getChildren().addAll(asiakasOtsikko, asiakasGrid, riviButtoneille3, asiakasTable);
         asiakasPohja.getChildren().add(asiakasVbox);
         paneeli.setCenter(asiakasPohja);
 
