@@ -78,7 +78,6 @@ public class Kayttoliittyma extends Application {
 
         //----------------------------------------------------------------------------------------
         //VARAUS -entiteetti
-
         HBox varausPohja = new HBox();
         varausPohja.setAlignment(Pos.CENTER);
         varausPohja.setStyle("-fx-background-color: lightgray;");
@@ -133,11 +132,12 @@ public class Kayttoliittyma extends Application {
         TextField varausAsiakasIdKentta = new TextField();
         varausGrid.add(varausAsiakasIdKentta, 3, 3);
 
-        //tallenna ja peruuta - nappi
+        //buttonit
         HBox riviButtoneille1 = new HBox(30);
-        Button btnTallenna1 = new Button("Tallenna");
-        Button btnPeruuta1 = new Button("Peruuta");
-        riviButtoneille1.getChildren().addAll(btnTallenna1, btnPeruuta1);
+        Button btnLisaa1 = new Button("Lisää");
+        Button btnPaivita1 = new Button("Päivitä");
+        Button btnPoista1 = new Button("Poista");
+        riviButtoneille1.getChildren().addAll(btnLisaa1, btnPaivita1, btnPoista1);
         riviButtoneille1.setAlignment(Pos.CENTER_LEFT);
 
         varausVbox.getChildren().addAll(varausOtsikko, varausGrid, riviButtoneille1);
@@ -164,8 +164,8 @@ public class Kayttoliittyma extends Application {
         varausPohja.getChildren().add(varausVbox);
         paneeli.setCenter(varausPohja);
 
-        //tapahtumankäsittelijä tallenna napille
-        btnTallenna1.setOnAction(e -> {
+        //tapahtumankäsittelijä lisää napille
+        btnLisaa1.setOnAction(e -> {
             try {
                 int id = Integer.parseInt(varausIdKentta.getText());
                 LocalDate alkamispaivamaara = alkamisPvmPicker.getValue();
@@ -175,35 +175,53 @@ public class Kayttoliittyma extends Application {
                 int mokki_id = Integer.parseInt(varausMokkiIdKentta.getText());
                 int asiakas_id = Integer.parseInt(varausAsiakasIdKentta.getText());
 
-                //olio johon kenttien tiedot asetetaan
-                Varaus uusiVaraus = new Varaus();
-                uusiVaraus.setId(id);
-                uusiVaraus.setAlkamispaivamaara(alkamispaivamaara);
-                uusiVaraus.setPaattumispaivamaara(paattumispaivamaara);
-                uusiVaraus.setHenkilomaara(henkilomaara);
-                uusiVaraus.setLasku_id(lasku_id);
-                uusiVaraus.setMokki_id(mokki_id);
-                uusiVaraus.setAsiakas_id(asiakas_id);
+                Varaus uusi = new Varaus(id, alkamispaivamaara, paattumispaivamaara, henkilomaara, lasku_id, mokki_id, asiakas_id);
+                tietokantaYhteysVaraus.createVaraus(uusi);
 
-                //tallennetaan olio tietokantaan
-                tietokantaYhteysVaraus.createVaraus(uusiVaraus);
-
+                varausTable.setItems(FXCollections.observableArrayList(tietokantaYhteysVaraus.getAllVaraukset()));
+                varausTable.getSelectionModel().clearSelection();
             } catch (NumberFormatException exception) {
-                Alert virhe1 = new Alert(Alert.AlertType.WARNING,"Tarkista, että kaikki kentät ovat numeroita.");
+                Alert virhe1 = new Alert(Alert.AlertType.ERROR, "Virhe lisättäessä varausta: " + exception.getMessage());
                 virhe1.show();
             }
         });
 
-        //tapahtumankäsittelijä peruuta napille
-        btnPeruuta1.setOnAction(e -> {
-            varausIdKentta.clear();
-            alkamisPvmPicker.setValue(null);
-            paattymisPvmPicker.setValue(null);
-            henkiloKentta.clear();
-            varausLaskuIdKentta.clear();
-            varausMokkiIdKentta.clear();
-            varausAsiakasIdKentta.clear();
+        //tapahtumankäsittelijä päivitä napille
+        btnPaivita1.setOnAction(e -> {
+            Varaus valittu = varausTable.getSelectionModel().getSelectedItem();
+            if (valittu != null) {
+                try {
+                    valittu.setAlkamispaivamaara(alkamisPvmPicker.getValue());
+                    valittu.setPaattumispaivamaara(paattymisPvmPicker.getValue());
+                    valittu.setHenkilomaara(Integer.parseInt(henkiloKentta.getText()));
+                    valittu.setLasku_id(Integer.parseInt(varausLaskuIdKentta.getText()));
+                    valittu.setMokki_id(Integer.parseInt(varausMokkiIdKentta.getText()));
+                    valittu.setAsiakas_id(Integer.parseInt(varausAsiakasIdKentta.getText()));
+                    valittu.setId(Integer.parseInt(varausIdKentta.getText()));
 
+                    tietokantaYhteysVaraus.updateVaraus(varaus);
+                    varausTable.setItems(FXCollections.observableArrayList(tietokantaYhteysVaraus.getAllVaraukset()));
+                    varausTable.getSelectionModel().clearSelection();
+                } catch (NumberFormatException exception) {
+                    Alert virhe2 = new Alert(Alert.AlertType.ERROR, "Virhe päivitettäessä varausta: " + exception.getMessage());
+                    virhe2.show();
+                }
+            }
+        });
+
+        //tapahtumankäsittelijä poista napille
+        btnPoista1.setOnAction(e -> {
+            Varaus valittu = varausTable.getSelectionModel().getSelectedItem();
+            if (valittu != null) {
+                try {
+                    tietokantaYhteysVaraus.deleteVaraus(valittu.getId());
+                    varausTable.setItems(FXCollections.observableArrayList(tietokantaYhteysVaraus.getAllVaraukset()));
+                    varausTable.getSelectionModel().clearSelection();
+
+                } catch (Exception ex) {
+                    new Alert(Alert.AlertType.ERROR, "Virhe poistettaessa varausta: " + ex.getMessage()).show();
+                }
+            }
         });
 
         //--------------------------------------------------------------------------------------------
