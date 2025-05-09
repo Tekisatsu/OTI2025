@@ -1,5 +1,3 @@
-package org.example.demo14;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,10 +18,12 @@ import javafx.collections.ObservableList;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Kayttoliittyma extends Application {
     TietokantaYhteysMokki tietokantaYhteysMokki = new TietokantaYhteysMokki();
     TietokantaYhteysAsiakas tietokantaYhteysAsiakas = new TietokantaYhteysAsiakas();
+    TietokantaYhteysVaraus tietokantaYhteysVaraus = new TietokantaYhteysVaraus();
     public void start(Stage primarystage) {
         //POP UP IKKUNA
         VBox alku = new VBox(15);
@@ -139,19 +139,20 @@ public class Kayttoliittyma extends Application {
         varausVbox.getChildren().addAll(varausOtsikko, varausGrid, riviButtoneille1);
 
         //Varaus TableView
-        ObservableList<Varaus> varaukset = FXCollections.observableArrayList();
-        TableView<Varaus> varausTable = new TableView<>(varaukset);
+        ObservableList<Varaus> varauksetList = FXCollections.observableArrayList(tietokantaYhteysVaraus.getAllVaraukset());
+        ObservableList<VarausInfo> varausInfoList = getVarausInfo(varauksetList);
+        TableView<VarausInfo> varausTable = new TableView<>(varausInfoList);
         varausTable.setPrefHeight(400);
         varausTable.setPrefWidth(200);
         varausTable.setStyle("-fx-background-color: white; -fx-border-color: gray;");
-        TableColumn<Varaus, Integer> varausIdCol = new TableColumn<>("id");
+        TableColumn<VarausInfo, Integer> varausIdCol = new TableColumn<>("id");
         varausIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        TableColumn<Varaus, Integer> asiakasCol = new TableColumn<>("asiakas");
-        asiakasCol.setCellValueFactory(new PropertyValueFactory<>("asiakas_id"));
-        TableColumn<Varaus, Integer> mokkiCol = new TableColumn<>("mökki");
-        mokkiCol.setCellValueFactory(new PropertyValueFactory<>("mökki_id"));
-        TableColumn<Varaus, Integer> laskuCol = new TableColumn<>("lasku");
-        laskuCol.setCellValueFactory(new PropertyValueFactory<>("lasku_id"));
+        TableColumn<VarausInfo, Asiakas> asiakasCol = new TableColumn<>("asiakas");
+        asiakasCol.setCellValueFactory(new PropertyValueFactory<>("asiakas"));
+        TableColumn<VarausInfo, Mokki> mokkiCol = new TableColumn<>("mökki");
+        mokkiCol.setCellValueFactory(new PropertyValueFactory<>("mokki"));
+        TableColumn<VarausInfo, Lasku> laskuCol = new TableColumn<>("lasku");
+        laskuCol.setCellValueFactory(new PropertyValueFactory<>("lasku"));
 
         varausTable.getColumns().setAll(varausIdCol, asiakasCol,mokkiCol,laskuCol);
         varausVbox.getChildren().addAll(varausTable);
@@ -394,7 +395,7 @@ public class Kayttoliittyma extends Application {
                 String puhelinnumero = puhelinnumeroKentta.getText();
                 //osoiteid lukeminen
                 int osoiteId = Integer.parseInt(asiakasOsoiteIdKentta.getText());
-                Osoite osoite = tietokantaYhteysOsoite.getOsoiteTK(osoiteId);
+                // 17:45 Osoite osoite = tietokantaYhteysOsoite.getOsoiteTK(osoiteId);
 
                 //varausten käsittely
                 List<Varaus> varaukset = new ArrayList<>();
@@ -424,8 +425,8 @@ public class Kayttoliittyma extends Application {
                 asiakas.setNimi(nimi);
                 asiakas.setSahkoposti(sahkoposti);
                 asiakas.setPuhelinnumero(puhelinnumero);
-                asiakas.setOsoite(osoite);
-                asiakas.setVaraukset(varaukset);
+                // 17:45 asiakas.setOsoite(osoite);
+                // 17:45 asiakas.setVaraukset(varaukset);
 
                 //tallennetaan asiakas olio tietokantaan
                 tietokantaYhteysAsiakas.createAsiakas(asiakas);
@@ -874,5 +875,17 @@ public class Kayttoliittyma extends Application {
         raporttiVBox.getChildren().addAll(otsikko, pvmValinta, painikeHBox, raporttiTaulukko);
         return raporttiVBox;
     }
+    public ObservableList<VarausInfo> getVarausInfo(ObservableList<Varaus> list) {
+        TietokantaYhteysAsiakas a = new TietokantaYhteysAsiakas();
+        TietokantaYhteysMokki m = new TietokantaYhteysMokki();
+        TietokantaYhteysLasku l = new TietokantaYhteysLasku();
+        ObservableList<VarausInfo> varausInfo = FXCollections.observableArrayList();
+        for (Varaus varaus : list) {
+            Asiakas asi = a.getAsiakastiedot(varaus.asiakas_id);
+            Mokki mok = m.readMokki(varaus.mokki_id);
+            Lasku las = l.getLaskuID(varaus.lasku_id);
+            varausInfo.add(new VarausInfo(varaus.id, asi, mok, las, varaus.henkilomaara, varaus.alkamispaivamaara,varaus.paattumispaivamaara));
+        }
+        return varausInfo;
+    }
 }
-

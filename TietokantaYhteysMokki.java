@@ -12,7 +12,7 @@ public class TietokantaYhteysMokki {
     }
 
     // osoite haku taulusta
-    private Osoite getOsoite(int osoiteId) {
+    public Osoite getOsoite(int osoiteId) {
         String sql = "SELECT * FROM OSOITE WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
             stmt.setInt(1, osoiteId);

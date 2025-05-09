@@ -9,6 +9,15 @@ public class Varaus {
     LocalDate alkamispaivamaara;
     LocalDate paattumispaivamaara;
 
+    public Varaus() {
+        this.id = 0;
+        this.asiakas_id = 0;
+        this.mokki_id = 0;
+        this.lasku_id = 0;
+        this.henkilomaara = 0;
+        this.alkamispaivamaara = null;
+        this.paattumispaivamaara = null;
+    }
     public Varaus(int id, int asiakas_id, int mokki_id, int lasku_id, int henkilomaara,LocalDate alkamispaivamaara, LocalDate paattumispaivamaara) {
         this.id = id;
         this.asiakas_id = asiakas_id;
