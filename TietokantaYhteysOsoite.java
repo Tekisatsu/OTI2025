@@ -49,12 +49,13 @@ public class TietokantaYhteysOsoite {
 
     // päivitä osoite
     public void updateOsoite(Osoite osoite) {
-        String sql = "UPDATE OSOITE SET Katuosoite = ?, Kaupunki = ?, Maa = ?, Postinumero = ?";
+        String sql = "UPDATE OSOITE SET Katuosoite = ?, Kaupunki = ?, Maa = ?, Postinumero = ? WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
             stmt.setString(1, osoite.getKatuosoite());
             stmt.setString(2, osoite.getKaupunki());
             stmt.setString(3, osoite.getMaa());
             stmt.setString(4, String.valueOf(osoite.getZip()));
+            stmt.setInt(5, osoite.getId());
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Osoite päivitetty ID:llä " + osoite.getId());
