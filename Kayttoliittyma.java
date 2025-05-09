@@ -1,3 +1,5 @@
+package org.example.demo14;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -55,7 +57,6 @@ public class Kayttoliittyma extends Application {
         //MENUBAR
         //pohjalle Borderpane
         BorderPane paneeli = new BorderPane();
-
         //menubar
         MenuBar menuBar = new MenuBar();
         //päävalikko
@@ -74,16 +75,22 @@ public class Kayttoliittyma extends Application {
         //----------------------------------------------------------------------------------------
         //VARAUS -entiteetti
 
-        VBox varausVbox = new VBox(30);
-        varausVbox.setStyle("-fx-background-color: lightgray;");
-        varausVbox.setAlignment(Pos.CENTER);
-        varausVbox.setPadding(new Insets(30));
-        varausVbox.setSpacing(20);
+        HBox varausPohja = new HBox();
+        varausPohja.setAlignment(Pos.CENTER);
+        varausPohja.setStyle("-fx-background-color: lightgray;");
+        varausPohja.setSpacing(50);
+        varausPohja.setPadding(new Insets(30));
+        varausPohja.setSpacing(20);
 
-        varausVbox.setMaxWidth(650);
-        varausVbox.setMaxHeight(650);
-        varausVbox.setPrefHeight(650);
-        varausVbox.setPrefWidth(650);
+        varausPohja.setMaxWidth(800);
+        varausPohja.setMaxHeight(800);
+        varausPohja.setPrefHeight(800);
+        varausPohja.setPrefWidth(800);
+
+        VBox varausVbox = new VBox(20);
+        varausVbox.setAlignment(Pos.TOP_LEFT);
+        varausVbox.setPadding(new Insets(20));
+        varausVbox.setPrefWidth(500);
 
         Label varausOtsikko = new Label("Tee varaus");
         varausOtsikko.setFont(Font.font("Arial", FontWeight.BOLD, 16));
@@ -92,19 +99,19 @@ public class Kayttoliittyma extends Application {
         varausGrid.setHgap(15);
         varausGrid.setVgap(15);
         varausGrid.setPadding(new Insets(20));
-        varausGrid.setAlignment(Pos.CENTER);
+        varausGrid.setAlignment(Pos.TOP_LEFT);
 
         varausGrid.add(new Label("ID:"), 0, 0);
         TextField varausIdKentta = new TextField();
         varausGrid.add(varausIdKentta, 1, 0);
 
         varausGrid.add(new Label("Alkamispäivämäärä:"), 0, 1);
-        TextField alkamisPvmKentta = new TextField();
-        varausGrid.add(alkamisPvmKentta, 1, 1);
+        DatePicker alkamisPvmPicker = new DatePicker();
+        varausGrid.add(alkamisPvmPicker, 1, 1);
 
         varausGrid.add(new Label("Päättymispäivämäärä:"), 0, 2);
-        TextField paattymisPvmKentta = new TextField();
-        varausGrid.add(paattymisPvmKentta, 1, 2);
+        DatePicker paattymisPvmPicker = new DatePicker();
+        varausGrid.add(paattymisPvmPicker, 1, 2);
 
         varausGrid.add(new Label("Henkilömäärä:"), 0, 3);
         TextField henkiloKentta = new TextField();
@@ -124,11 +131,11 @@ public class Kayttoliittyma extends Application {
 
         //tallenna ja peruuta - nappi
         HBox riviButtoneille1 = new HBox(30);
-
         Button btnTallenna1 = new Button("Tallenna");
         Button btnPeruuta1 = new Button("Peruuta");
         riviButtoneille1.getChildren().addAll(btnTallenna1, btnPeruuta1);
-        riviButtoneille1.setAlignment(Pos.CENTER);
+        riviButtoneille1.setAlignment(Pos.CENTER_LEFT);
+
         varausVbox.getChildren().addAll(varausOtsikko, varausGrid, riviButtoneille1);
 
         //Varaus TableView
@@ -148,37 +155,58 @@ public class Kayttoliittyma extends Application {
 
         varausTable.getColumns().setAll(varausIdCol, asiakasCol,mokkiCol,laskuCol);
         varausVbox.getChildren().addAll(varausTable);
-        paneeli.setCenter(varausVbox);
 
-        //tapahtumankäsittelijä tallenna buttonille
+        varausPohja.getChildren().add(varausVbox);
+        paneeli.setCenter(varausPohja);
+
+        //tapahtumankäsittelijä tallenna napille
         btnTallenna1.setOnAction(e -> {
             try {
                 int id = Integer.parseInt(varausIdKentta.getText());
-                int asiakas_id = Integer.parseInt(varausAsiakasIdKentta.getText());
-                int mokki_id = Integer.parseInt(varausMokkiIdKentta.getText());
+                LocalDate alkamispaivamaara = alkamisPvmPicker.getValue();
+                LocalDate paattumispaivamaara = paattymisPvmPicker.getValue();
+                int henkilomaara = Integer.parseInt(henkiloKentta.getText());
                 int lasku_id = Integer.parseInt(varausLaskuIdKentta.getText());
+                int mokki_id = Integer.parseInt(varausMokkiIdKentta.getText());
+                int asiakas_id = Integer.parseInt(varausAsiakasIdKentta.getText());
 
-                //alkamis- ja päättymispvm, henkilömäärä?
+                //olio johon kenttien tiedot asetetaan
+                Varaus uusiVaraus = new Varaus();
+                uusiVaraus.setId(id);
+                uusiVaraus.setAlkamispaivamaara(alkamispaivamaara);
+                uusiVaraus.setPaattumispaivamaara(paattumispaivamaara);
+                uusiVaraus.setHenkilomaara(henkilomaara);
+                uusiVaraus.setLasku_id(lasku_id);
+                uusiVaraus.setMokki_id(mokki_id);
+                uusiVaraus.setAsiakas_id(asiakas_id);
+
+                //tallennetaan olio tietokantaan
+                tietokantaYhteysVaraus.createVaraus(uusiVaraus);
 
             } catch (NumberFormatException exception) {
-                throw new RuntimeException(exception);
+                Alert virhe1 = new Alert(Alert.AlertType.WARNING,"Tarkista, että kaikki kentät ovat numeroita.");
+                virhe1.show();
             }
         });
 
+        //tapahtumankäsittelijä peruuta napille
+        btnPeruuta1.setOnAction(e -> {
+            varausIdKentta.clear();
+            alkamisPvmPicker.setValue(null);
+            paattymisPvmPicker.setValue(null);
+            henkiloKentta.clear();
+            varausLaskuIdKentta.clear();
+            varausMokkiIdKentta.clear();
+            varausAsiakasIdKentta.clear();
+
+        });
 
         //--------------------------------------------------------------------------------------------
         //MÖKIT -entiteetti
         HBox mokkiPohja = new HBox();
         mokkiPohja.setAlignment(Pos.CENTER);
         mokkiPohja.setStyle("-fx-background-color: lightgray;");
-        mokkiPohja.setSpacing(50);
-        //mokkiPohja.setPadding(new Insets(30));
-        //mokkiPohja.setSpacing(20);
-
-        //mokkiPohja.setMaxWidth(800);
-        //mokkiPohja.setMaxHeight(800);
-        //mokkiPohja.setPrefHeight(800);
-        //mokkiPohja.setPrefWidth(800);
+        mokkiPohja.setPadding(new Insets(30));
 
         VBox mokkiVbox = new VBox(20);
         mokkiVbox.setAlignment(Pos.TOP_LEFT);
@@ -214,7 +242,6 @@ public class Kayttoliittyma extends Application {
         TextField osoiteIdKentta = new TextField();
         mokkiGrid.add(osoiteIdKentta, 3, 2);
 
-
         //tallenna ja peruuta -nappi
         HBox riviButtoneille2 = new HBox(30);
         Button btnTallenna2 = new Button("Tallenna");
@@ -222,7 +249,7 @@ public class Kayttoliittyma extends Application {
         riviButtoneille2.getChildren().addAll(btnTallenna2, btnPeruuta2);
         riviButtoneille2.setAlignment(Pos.CENTER_LEFT);
 
-        mokkiVbox.getChildren().addAll(mokitOtsikko,mokkiGrid,riviButtoneille2);
+        mokkiVbox.getChildren().addAll(mokitOtsikko, mokkiGrid, riviButtoneille2);
 
         ObservableList<Mokki> mokit = FXCollections.observableArrayList(tietokantaYhteysMokki.readAllMokit());
         TableView<Mokki> mokkiTable = new TableView<>(mokit);
@@ -241,39 +268,59 @@ public class Kayttoliittyma extends Application {
         mokkiTable.getColumns().setAll(idCol, nameCol,osoiteCol,vuokrahintaCol);
 
         mokkiVbox.getChildren().addAll(mokkiTable);
-        mokkiPohja.getChildren().addAll(mokkiVbox);
 
+        mokkiPohja.getChildren().addAll(mokkiVbox);
         paneeli.setCenter(mokkiPohja);
 
-
-        //tapahtumankäsittelijä tallenna buttonille
+        //tapahtumankäsittelijä tallenna napille
         btnTallenna2.setOnAction(ActionEvent -> {
             try {
                 int id = Integer.parseInt(mokkiIdKentta.getText());
                 String name = mokkiNimiKentta.getText();
                 String tila = mokkiTilaKentta.getText();
                 double vuokrahinta = Double.parseDouble(vuokrahintaKentta.getText());
-                //osoite?
+                //haetaan osoite ID:n perusteella
+                int osoiteId = Integer.parseInt(osoiteIdKentta.getText());
+                Osoite osoite = tietokantaYhteysMokki.getOsoite(osoiteId);
+
+                //olio johon kenttien arvot asetetaan
+                Mokki mokki = new Mokki();
+                mokki.setId(id);
+                mokki.setName(name);
+                mokki.setTila(tila);
+                mokki.setVuokrahinta(vuokrahinta);
+                mokki.setOsoite(osoite);
+
+                //tallennetaan mokki olio tietokantaan
+                tietokantaYhteysMokki.createMokki(mokki);
 
             } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
+                Alert virhe2 = new Alert(Alert.AlertType.WARNING, "Tarkista, että kentät ovat oikeassa muodossa.");
+                virhe2.show();
             }
         });
 
+        //tapahtumankäsittelijä peruuta napille
+        btnPeruuta2.setOnAction(e -> {
+            mokkiIdKentta.clear();
+            mokkiNimiKentta.clear();
+            mokkiTilaKentta.clear();
+            vuokrahintaKentta.clear();
+            osoiteIdKentta.clear();
+        });
 
         //------------------------------------------------------------------------------------------
         //ASIAKAS -entiteetti
 
-        VBox asiakasVbox = new VBox();
-        asiakasVbox.setStyle("-fx-background-color: lightgray;");
-        asiakasVbox.setAlignment(Pos.CENTER);
-        asiakasVbox.setPadding(new Insets(30));
-        asiakasVbox.setSpacing(20);
+        HBox asiakasPohja = new HBox();
+        asiakasPohja.setAlignment(Pos.CENTER);
+        asiakasPohja.setStyle("-fx-background-color: lightgray;");
+        asiakasPohja.setPadding(new Insets(30));
 
-        asiakasVbox.setMaxWidth(650);
-        asiakasVbox.setMaxHeight(650);
-        asiakasVbox.setPrefHeight(650);
-        asiakasVbox.setPrefWidth(650);
+        VBox asiakasVbox = new VBox(20);
+        asiakasVbox.setAlignment(Pos.TOP_LEFT);
+        asiakasVbox.setPadding(new Insets(20));
+        asiakasVbox.setPrefWidth(500);
 
         Label asiakasOtsikko = new Label("Asiakas");
         asiakasOtsikko.setFont(Font.font("Arial", FontWeight.BOLD, 16));
@@ -282,7 +329,7 @@ public class Kayttoliittyma extends Application {
         asiakasGrid.setHgap(15);
         asiakasGrid.setVgap(15);
         asiakasGrid.setPadding(new Insets(20));
-        asiakasGrid.setAlignment(Pos.CENTER);
+        asiakasGrid.setAlignment(Pos.TOP_LEFT);
 
         asiakasGrid.add(new Label("ID:"), 0, 0);
         TextField asiakasIdKentta = new TextField();
@@ -300,13 +347,9 @@ public class Kayttoliittyma extends Application {
         TextField puhelinnumeroKentta = new TextField();
         asiakasGrid.add(puhelinnumeroKentta, 1, 3);
 
-        asiakasGrid.add(new Label("Osoite ID:"), 2, 1);
+        asiakasGrid.add(new Label("Osoite ID:"), 2, 2);
         TextField asiakasOsoiteIdKentta = new TextField();
-        asiakasGrid.add(asiakasOsoiteIdKentta, 3, 1);
-
-        asiakasGrid.add(new Label("Maksutiedot ID:"), 2, 2);
-        TextField maksutiedotIdKentta = new TextField();
-        asiakasGrid.add(maksutiedotIdKentta, 3, 2);
+        asiakasGrid.add(asiakasOsoiteIdKentta, 3, 2);
 
         asiakasGrid.add(new Label("Varaukset:"), 2, 3);
         TextField varauksetKentta = new TextField();
@@ -330,92 +373,105 @@ public class Kayttoliittyma extends Application {
         asiakasOsoiteCol.setCellValueFactory(new PropertyValueFactory<>("osoite"));
 
         asiakasTable.getColumns().setAll(asiakasIdCol, asiakasNimiCol,asiakasSpostiCol,puhCol,asiakasOsoiteCol);
-
+        
         //tallenna ja peruuta - nappi
         HBox riviButtoneille3 = new HBox(30);
         Button btnTallenna3 = new Button("Tallenna");
         Button btnPeruuta3 = new Button("Peruuta");
         riviButtoneille3.getChildren().addAll(btnTallenna3, btnPeruuta3);
-        riviButtoneille3.setAlignment(Pos.CENTER);
-        asiakasVbox.getChildren().addAll(asiakasOtsikko, asiakasGrid, riviButtoneille3, asiakasTable);
-        paneeli.setCenter(asiakasVbox);
+        riviButtoneille3.setAlignment(Pos.CENTER_LEFT);
 
-        //tapahtumankäsittelijä tallenna buttonille
+        asiakasVbox.getChildren().addAll(asiakasOtsikko, asiakasGrid, riviButtoneille3); //asiakastable
+        asiakasPohja.getChildren().add(asiakasVbox);
+        paneeli.setCenter(asiakasPohja);
+
+        //tapahtumankäsittelijä tallenna napille
         btnTallenna3.setOnAction(ActionEvent -> {
             try {
                 int id = Integer.parseInt(asiakasIdKentta.getText());
-                String name = asiakasNimiKentta.getText();
+                String nimi = asiakasNimiKentta.getText();
                 String sahkoposti = sahkopostiKentta.getText();
-                //puhelinnumero pitää vaihtaa intiksi?
-                //osoiteid
-                //maksutiedot
-                //varaukset
+                String puhelinnumero = puhelinnumeroKentta.getText();
+                //osoiteid lukeminen
+                int osoiteId = Integer.parseInt(asiakasOsoiteIdKentta.getText());
+                Osoite osoite = tietokantaYhteysOsoite.getOsoiteTK(osoiteId);
+
+                //varausten käsittely
+                List<Varaus> varaukset = new ArrayList<>();
+                String[] varausIdt = varauksetKentta.getText().split(",");
+                for (String idStr : varausIdt) {
+                    if (!idStr.isBlank()) {
+                        try {
+                            int varausId = Integer.parseInt(idStr.trim());
+                            Varaus varaus = tietokantaYhteysVaraus.getVaraus(varausId);
+                            if (varaus != null) {
+                                varaukset.add(varaus);
+                            } else {
+                                Alert virhe = new Alert(Alert.AlertType.WARNING, "Varaus ID ei löytynyt: " + varausId);
+                                virhe.show();
+                            }
+                        } catch (NumberFormatException e) {
+                            Alert virhe = new Alert(Alert.AlertType.WARNING, "Virheellinen varaus ID: " + idStr);
+                            virhe.show();
+                        }
+                    }
+                }
+
+
+                //luodaan olio johon kenttien arvot asetetaan
+                Asiakas asiakas = new Asiakas();
+                asiakas.setId(id);
+                asiakas.setNimi(nimi);
+                asiakas.setSahkoposti(sahkoposti);
+                asiakas.setPuhelinnumero(puhelinnumero);
+                asiakas.setOsoite(osoite);
+                asiakas.setVaraukset(varaukset);
+
+                //tallennetaan asiakas olio tietokantaan
+                tietokantaYhteysAsiakas.createAsiakas(asiakas);
 
             } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
+                Alert virhe3 = new Alert(Alert.AlertType.WARNING, "Varmista, että syötteet ovat oikeassa muodossa.");
+                virhe3.show();
             }
+        });
+
+        //tapahtumankäsittelijä peruuta napille
+        btnPeruuta3.setOnAction(e -> {
+            asiakasIdKentta.clear();
+            asiakasNimiKentta.clear();
+            sahkopostiKentta.clear();
+            puhelinnumeroKentta.clear();
+            asiakasOsoiteIdKentta.clear();
+            varauksetKentta.clear();
         });
 
 
         //------------------------------------------------------------------------------------
         //LASKU -entiteetti
 
-        // Tälle luotu oma metodi alempana
-        
-        //----------------------------------------------------------------------------------------
-        //MAJOITUKSEN RAPORTOINTI -entiteetti
-
-        // Tälle luotu oma metodi alempana
-
-        //----------------------------------------------------------------------------------------
-        //vaihdetaan näkymiä menubarista klikkaamalla
-        menuVaraus.setOnAction(e -> {
-            paneeli.setCenter(varausVbox);
-        });
-        menuMokki.setOnAction(e -> {
-            paneeli.setCenter(mokkiVbox);
-        });
-        menuLasku.setOnAction(e -> {
-            paneeli.setCenter(luoLaskuNakyma());
-        });
-        menuAsiakas.setOnAction(e -> {
-            paneeli.setCenter(asiakasVbox);
-        });
-        menuRaportointi.setOnAction(e -> {
-            paneeli.setCenter(luoRaportointiNakyma());
-        });
-
-        //käyttöliittymän näyttö on aluksi tyhjä
-        //Mitä tähän keksisi?
-        paneeli.setCenter(null);
-
-        Scene scene = new Scene(paneeli, 1100, 750);
-        primarystage.setTitle("Mökkien varaaminen");
-        primarystage.setScene(scene);
-        primarystage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    // laskunäkymän luonti
-    public VBox luoLaskuNakyma() {
+        HBox laskuPohja = new HBox();
+        laskuPohja.setAlignment(Pos.CENTER_LEFT);
+        laskuPohja.setStyle("-fx-background-color: lightgray;");
+        laskuPohja.setPadding(new Insets(30));
 
         VBox laskuVbox = new VBox(20);
-        laskuVbox.setStyle("-fx-background-color: lightgray;");
-        laskuVbox.setAlignment(Pos.CENTER);
-        laskuVbox.setPadding(new Insets(30));
+        laskuVbox.setAlignment(Pos.TOP_LEFT);
+        laskuVbox.setPadding(new Insets(20));
+        laskuVbox.setPrefWidth(500);
 
-        Label laskuOtsikko = new Label("Lasku");
-        laskuOtsikko.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        Label laskuOtsikko = new Label("Laskut");
+        laskuOtsikko.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 
-        // Luodaan ja asetetaan tekstikentät
         GridPane laskuGrid = new GridPane();
         laskuGrid.setHgap(20);
         laskuGrid.setVgap(20);
         laskuGrid.setPadding(new Insets(20));
-        laskuGrid.setAlignment(Pos.CENTER);
+        laskuGrid.setAlignment(Pos.TOP_LEFT);
+
+        laskuGrid.add(new Label("ID:"), 0, 0);
+        TextField laskuIdKentta = new TextField();
+        laskuGrid.add(laskuIdKentta, 1, 0);
 
         laskuGrid.add(new Label("Saaja:"), 0, 1);
         TextField saajaKentta = new TextField();
@@ -434,8 +490,8 @@ public class Kayttoliittyma extends Application {
         laskuGrid.add(viitenumeroKentta, 3, 0);
 
         laskuGrid.add(new Label("Eräpäivä:"), 2, 1);
-        DatePicker erapaivaKentta = new DatePicker();
-        laskuGrid.add(erapaivaKentta, 3, 1);
+        DatePicker erapaivaPicker = new DatePicker();
+        laskuGrid.add(erapaivaPicker, 3, 1);
 
         laskuGrid.add(new Label("Y-tunnus:"), 2, 2);
         TextField ytunnusKentta = new TextField();
@@ -445,140 +501,152 @@ public class Kayttoliittyma extends Application {
         TextField alvKentta = new TextField();
         laskuGrid.add(alvKentta, 3, 3);
 
-        // Painikkeet tallennukselle ja poistamiselle
+        //tallenna ja peruuta nappi
         HBox riviButtoneille4 = new HBox(30);
         Button btnTallenna4 = new Button("Tallenna");
-        Button btnPoista4 = new Button("Poista");
-        riviButtoneille4.getChildren().addAll(btnTallenna4, btnPoista4);
-        riviButtoneille4.setAlignment(Pos.CENTER);
+        Button btnPeruuta4 = new Button("Peruuta");
+        riviButtoneille4.getChildren().addAll(btnTallenna4, btnPeruuta4);
+        riviButtoneille4.setAlignment(Pos.CENTER_LEFT);
 
-        // Taulukko aikaisempien laskujen tarkastelulle
-        TableView<Lasku> laskuTable = new TableView<>();
-        laskuTable.setPrefSize(700, 400);
+        laskuVbox.getChildren().addAll(laskuOtsikko, laskuGrid, riviButtoneille4);
+        laskuPohja.getChildren().add(laskuVbox);
+        paneeli.setCenter(laskuPohja);
 
-        // Taulukon sarakkeet
-        TableColumn<Lasku, Integer> idCol = new TableColumn<>("ID");
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        TableColumn<Lasku, String> viiteCol = new TableColumn<>("Viitenumero");
-        viiteCol.setCellValueFactory(new PropertyValueFactory<>("viitenumero"));
-
-        TableColumn<Lasku, LocalDate> eraCol = new TableColumn<>("Eräpäivä");
-        eraCol.setCellValueFactory(new PropertyValueFactory<>("erapaiva"));
-
-        TableColumn<Lasku, String> maksajaCol = new TableColumn<>("Maksaja");
-        maksajaCol.setCellValueFactory(new PropertyValueFactory<>("maksaja"));
-
-        TableColumn<Lasku, String> saajaCol = new TableColumn<>("Saaja");
-        saajaCol.setCellValueFactory(new PropertyValueFactory<>("saaja"));
-
-        TableColumn<Lasku, String> ytunnusCol = new TableColumn<>("Y-tunnus");
-        ytunnusCol.setCellValueFactory(new PropertyValueFactory<>("ytunnus"));
-
-        TableColumn<Lasku, Double> prosenttiCol = new TableColumn<>("Alennusveroprosentti");
-        prosenttiCol.setCellValueFactory(new PropertyValueFactory<>("alvprosentti"));
-
-        TableColumn<Lasku, Double> maaraCol = new TableColumn<>("Määrä");
-        maaraCol.setCellValueFactory(new PropertyValueFactory<>("maara"));
-
-        laskuTable.getColumns().addAll(idCol, viiteCol, eraCol, maksajaCol, saajaCol, ytunnusCol, prosenttiCol, maaraCol);
-
-        // Luetaan tietokanta aina kun näkymä alustetaan
-        ObservableList<Lasku> laskuData = FXCollections.observableArrayList(new TietokantaYhteysLasku().getAllLaskut());
-        laskuTable.setItems(laskuData);
-
-        // Korostamalla laskuja saadaan täytettyä tekstikentät valmiiksi
-        laskuTable.getSelectionModel().selectedItemProperty().addListener((obs, vanha, uusi) -> {
-            if (uusi != null) {
-                viitenumeroKentta.setText(uusi.getViitenumero());
-                erapaivaKentta.setValue(uusi.getErapaiva());
-                maksajaKentta.setText(uusi.getMaksaja());
-                saajaKentta.setText(uusi.getSaaja());
-                ytunnusKentta.setText(uusi.getYtunnus());
-                alvKentta.setText(String.valueOf(uusi.getAlvprosentti()));
-                maaraKentta.setText(String.valueOf(uusi.getMaara()));
-            }
-        });
-
-        // Tapahtumankäsittelijä tallenna buttonille
-        btnTallenna4.setOnAction(e -> {
-            Lasku valittu = laskuTable.getSelectionModel().getSelectedItem();
+        //tapahtumankäsittelijä tallenna napille
+        btnTallenna4.setOnAction(ActionEvent -> {
             try {
-                String viitenumero = viitenumeroKentta.getText();
-                LocalDate erapaiva = erapaivaKentta.getValue();
-                String maksaja = maksajaKentta.getText();
+                int id = Integer.parseInt(laskuIdKentta.getText());
                 String saaja = saajaKentta.getText();
-                String ytunnus = ytunnusKentta.getText();
-                double alv = Double.parseDouble(alvKentta.getText());
+                String maksaja = maksajaKentta.getText();
                 double maara = Double.parseDouble(maaraKentta.getText());
+                String viitenumero = viitenumeroKentta.getText();
+                //eräpäivän käsittely
+                LocalDate erapaiva = erapaivaPicker.getValue();
 
-                TietokantaYhteysLasku yhteys = new TietokantaYhteysLasku();
+                String ytunnus = ytunnusKentta.getText();
+                double alvprosentti = Double.parseDouble(alvKentta.getText());
 
-                if (valittu != null) {
-                    // Päivitä olemassa oleva
-                    valittu.setViitenumero(viitenumero);
-                    valittu.setErapaiva(erapaiva);
-                    valittu.setMaksaja(maksaja);
-                    valittu.setSaaja(saaja);
-                    valittu.setYtunnus(ytunnus);
-                    valittu.setAlvprosentti(alv);
-                    valittu.setMaara(maara);
+                //lasku olio johon kenttien arvot asetetaan
+                Lasku lasku = new Lasku();
+                lasku.setId(id);
+                lasku.setSaaja(saaja);
+                lasku.setMaksaja(maksaja);
+                lasku.setMaara(maara);
+                lasku.setViitenumero(viitenumero);
+                lasku.setErapaiva(erapaiva);
+                lasku.setYtunnus(ytunnus);
+                lasku.setAlvprosentti(alvprosentti);
 
-                    yhteys.updateLasku(valittu);
-                } else {
-                    // Luo uusi lasku (ID generoituu automaattisesti)
-                    Lasku uusi = new Lasku("0", viitenumero, erapaiva, maksaja, saaja, ytunnus, String.valueOf(alv), String.valueOf(maara));
-                    yhteys.createLasku(uusi);
-                }
+                //tallennetaan lasku olio tietokantaan
+                tietokantaYhteysLasku.createLasku(lasku);
 
-                // Päivitä taulukko
-                laskuTable.setItems(FXCollections.observableArrayList(yhteys.getAllLaskut()));
-                laskuTable.getSelectionModel().clearSelection();
-
-                // Tyhjennä kentät
-                viitenumeroKentta.clear();
-                erapaivaKentta.setValue(null);
-                maksajaKentta.clear();
-                saajaKentta.clear();
-                ytunnusKentta.clear();
-                alvKentta.clear();
-                maaraKentta.clear();
-
-            } catch (Exception ex) {
-                System.err.println("Virhe tallennuksessa: " + ex.getMessage());
+            } catch (NumberFormatException e) {
+                Alert virhe4 = new Alert(Alert.AlertType.WARNING,"Varmista, että määrä ja alv-prosentti ovat oikeassa muodossa.");
+                virhe4.show();
             }
         });
 
-        // Laskun poistaminen taulukosta
-        btnPoista4.setOnAction(e -> {
-            Lasku valittu = laskuTable.getSelectionModel().getSelectedItem();
-
-            if (valittu != null) {
-                int id = valittu.getId();
-                TietokantaYhteysLasku yhteys = new TietokantaYhteysLasku();
-                yhteys.deleteLasku(id);
-
-                // Päivitä taulukko
-                laskuTable.setItems(FXCollections.observableArrayList(yhteys.getAllLaskut()));
-                laskuTable.getSelectionModel().clearSelection();
-
-                // Tyhjennä kentät
-                viitenumeroKentta.clear();
-                erapaivaKentta.setValue(null);
-                maksajaKentta.clear();
-                saajaKentta.clear();
-                ytunnusKentta.clear();
-                alvKentta.clear();
-                maaraKentta.clear();
-
-            } else {
-                System.out.println("Valitse poistettava lasku taulukosta.");
-            }
+        //tapahtumankäsittelijä peruuta napille
+        btnPeruuta4.setOnAction(e -> {
+            laskuIdKentta.clear();
+            saajaKentta.clear();
+            maksajaKentta.clear();
+            maaraKentta.clear();
+            viitenumeroKentta.clear();
+            erapaivaPicker.setValue(null);
+            ytunnusKentta.clear();
+            alvKentta.clear();
         });
 
-        laskuVbox.getChildren().addAll(laskuOtsikko, laskuGrid, riviButtoneille4, laskuTable);
-        return laskuVbox;
+        //----------------------------------------------------------------------------------------
+        //MAJOITUKSEN RAPORTOINTI -entiteetti
+
+        // tälle luotu oma metodi alempana
+
+        //----------------------------------------------------------------------------------------
+        //vaihdetaan näkymiä menubarista klikkaamalla
+        menuVaraus.setOnAction(e -> {
+            paneeli.setCenter(varausVbox);
+        });
+        menuMokki.setOnAction(e -> {
+            paneeli.setCenter(mokkiVbox);
+        });
+        menuLasku.setOnAction(e -> {
+            paneeli.setCenter(laskuVbox);
+        });
+        menuAsiakas.setOnAction(e -> {
+            paneeli.setCenter(asiakasVbox);
+        });
+        menuRaportointi.setOnAction(e -> {
+            paneeli.setCenter(luoRaportointiNakyma());
+        });
+
+        //---------------------------------------------------------------------------
+        //aloitusnäkymä
+        VBox aloitusVbox = new VBox();
+        aloitusVbox.setStyle("-fx-background-color: lightgray;");
+        aloitusVbox.setAlignment(Pos.CENTER_LEFT);
+        aloitusVbox.setPadding(new Insets(30));
+        aloitusVbox.setSpacing(20);
+
+        aloitusVbox.setMaxWidth(650);
+        aloitusVbox.setMaxHeight(650);
+        aloitusVbox.setPrefHeight(650);
+        aloitusVbox.setPrefWidth(650);
+
+        GridPane aloitusGrid = new GridPane();
+        aloitusGrid.setHgap(20);
+        aloitusGrid.setVgap(20);
+        aloitusGrid.setPadding(new Insets(20));
+        aloitusGrid.setAlignment(Pos.CENTER);
+
+        Label tervetuloaLabel = new Label("Tervetuloa mökkien varausjärjestelmään");
+        tervetuloaLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        aloitusGrid.add(tervetuloaLabel, 0, 0);
+
+        Label tyhjaLabel = new Label(" ");
+        aloitusGrid.add(tyhjaLabel, 0, 1);
+
+        Label valitseLabel = new Label("         Valitse yläkulmasta haluamasi toiminto:");
+        valitseLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        aloitusGrid.add(valitseLabel, 0, 2);
+
+        Label varausLabel = new Label("         Tee varaus");
+        varausLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        aloitusGrid.add(varausLabel, 0, 3);
+
+        Label mokitLabel = new Label("         Mökit");
+        mokitLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        aloitusGrid.add(mokitLabel, 0, 4);
+
+        Label asiakasLabel = new Label("         Asiakas");
+        asiakasLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        aloitusGrid.add(asiakasLabel, 0, 5);
+
+        Label laskuLabel = new Label("         Lasku");
+        laskuLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        aloitusGrid.add(laskuLabel, 0, 6);
+
+        Label raportointiLabel = new Label("         Majoituksen raportointi");
+        raportointiLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        aloitusGrid.add(raportointiLabel, 0, 7);
+
+        aloitusVbox.getChildren().add(aloitusGrid);
+
+        paneeli.setCenter(aloitusVbox);
+
+        //--------------------------------------------------------------------
+
+        Scene scene = new Scene(paneeli, 1100, 750);
+        primarystage.setTitle("Mökkien varaaminen");
+        primarystage.setScene(scene);
+        primarystage.show();
     }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
 
     // raportointinäkymän luonti
     public VBox luoRaportointiNakyma() {
@@ -685,3 +753,4 @@ public class Kayttoliittyma extends Application {
         return raporttiVBox;
     }
 }
+
