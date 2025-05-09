@@ -466,7 +466,7 @@ public class Kayttoliittyma extends Application {
             paneeli.setCenter(mokkiVbox);
         });
         menuLasku.setOnAction(e -> {
-            paneeli.setCenter(luoLaskuNakyma);
+            paneeli.setCenter(luoLaskuNakyma());
         });
         menuAsiakas.setOnAction(e -> {
             paneeli.setCenter(asiakasVbox);
@@ -540,7 +540,6 @@ public class Kayttoliittyma extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-}
 
     // laskunäkymän luonti
     public VBox luoLaskuNakyma() {
@@ -748,7 +747,7 @@ public class Kayttoliittyma extends Application {
 
         VBox raporttiVBox = new VBox(20);
         raporttiVBox.setStyle("-fx-background-color: lightgray;");
-        raporttiVBox.setAlignment(Pos.CENTER);
+        raporttiVBox.setAlignment(Pos.CENTER_LEFT);
         raporttiVBox.setPadding(new Insets(30));
 
         Label otsikko = new Label("Majoituksen raportointi");
@@ -761,17 +760,22 @@ public class Kayttoliittyma extends Application {
         Label loppuPvmLabel = new Label("Loppupäivämäärä");
         DatePicker loppuPvmPicker = new DatePicker();
         pvmValinta.getChildren().addAll(alkuPvmLabel, alkuPvmPicker, loppuPvmLabel, loppuPvmPicker);
-        pvmValinta.setAlignment(Pos.CENTER);
+        pvmValinta.setAlignment(Pos.CENTER_LEFT);
 
         // painike raporttiin lisäämiselle
         Button lisaaBtn = new Button("Lisää raporttiin");
 
         // painike raportista poistamiseen
         Button poistoBtn = new Button("Poista raportista");
+        poistoBtn.setVisible(false);
+
+        HBox painikeHBox = new HBox(40);
+        painikeHBox.getChildren().addAll(lisaaBtn, poistoBtn);
 
         // taulukko raportin tarkastelulle
         TableView<Raportti> raporttiTaulukko = new TableView<>();
         raporttiTaulukko.setPrefSize(700, 400);
+        raporttiTaulukko.setStyle("-fx-border-color: gray;");
 
         // taulukon sarakkeet
         TableColumn<Raportti, LocalDate> alkuCol = new TableColumn<>("Alku");
@@ -801,8 +805,31 @@ public class Kayttoliittyma extends Application {
 
         // luetaan CSV aina kun näkymä alustetaan
         raportit.setAll(RaporttiCSV.lueRaportitCSV("raportti.csv"));
-
         raporttiTaulukko.setItems(raportit);
+
+        // Korostamalla raportteja saadaan täytettyä kentät valmiiksi
+        raporttiTaulukko.getSelectionModel().selectedItemProperty().addListener((obs, vanha, uusi) -> {
+            boolean valittu = uusi != null;
+            poistoBtn.setVisible(valittu);
+
+            if (valittu) {
+                alkuPvmPicker.setValue(uusi.getAlkuPvm());
+                loppuPvmPicker.setValue(uusi.getLoppuPvm());
+            }
+        });
+
+        // Klikkaus taulukon ulkopuolella tyhjentää valinnan ja kentät
+        raporttiVBox.setOnMouseClicked(event -> {
+            // Jos klikattu ei ollut taulukko tai mikään sen lapsi
+            if (!raporttiTaulukko.equals(event.getTarget()) && !raporttiTaulukko.isHover()) {
+                // Tyhjennetään valinta
+                raporttiTaulukko.getSelectionModel().clearSelection();
+
+                // Tyhjennetään kentät
+                alkuPvmPicker.setValue(null);
+                loppuPvmPicker.setValue(null);
+            }
+        });
 
         // lisääminen taulukkoon
         lisaaBtn.setOnAction(e -> {
@@ -844,7 +871,7 @@ public class Kayttoliittyma extends Application {
             }
         });
 
-        raporttiVBox.getChildren().addAll(otsikko, pvmValinta, lisaaBtn, raporttiTaulukko, poistoBtn);
+        raporttiVBox.getChildren().addAll(otsikko, pvmValinta, painikeHBox, raporttiTaulukko);
         return raporttiVBox;
     }
 }
