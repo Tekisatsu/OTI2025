@@ -373,7 +373,7 @@ public class Kayttoliittyma extends Application {
         asiakasOsoiteCol.setCellValueFactory(new PropertyValueFactory<>("osoite"));
 
         asiakasTable.getColumns().setAll(asiakasIdCol, asiakasNimiCol,asiakasSpostiCol,puhCol,asiakasOsoiteCol);
-        
+
         //tallenna ja peruuta - nappi
         HBox riviButtoneille3 = new HBox(30);
         Button btnTallenna3 = new Button("Tallenna");
@@ -381,7 +381,7 @@ public class Kayttoliittyma extends Application {
         riviButtoneille3.getChildren().addAll(btnTallenna3, btnPeruuta3);
         riviButtoneille3.setAlignment(Pos.CENTER_LEFT);
 
-        asiakasVbox.getChildren().addAll(asiakasOtsikko, asiakasGrid, riviButtoneille3); //asiakastable
+        asiakasVbox.getChildren().addAll(asiakasOtsikko, asiakasGrid, riviButtoneille3, asiakasTable); 
         asiakasPohja.getChildren().add(asiakasVbox);
         paneeli.setCenter(asiakasPohja);
 
