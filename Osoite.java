@@ -1,22 +1,23 @@
 public class Osoite {
     int id;
-    String osoite;
+    String katuosoite;
     String kaupunki;
     String maa;
     int zip;
 
     public Osoite() {
-        osoite = "";
+        katuosoite = "";
         kaupunki = "";
         maa = "";
         zip = 0;
     }
 
-    public Osoite(String osoite, String kaupunki, String maa, int zip) {
-        this.osoite = osoite;
+    public Osoite(String id, String osoite, String kaupunki, String maa, String zip) {
+        this.id = Integer.parseInt(id);
+        this.katuosoite = osoite;
         this.kaupunki = kaupunki;
         this.maa = maa;
-        this.zip = zip;
+        this.zip = Integer.parseInt(zip);
     }
     public int getId() {
         return id;
@@ -25,12 +26,12 @@ public class Osoite {
         this.id = id;
     }
 
-    public String getOsoite() {
-        return osoite;
+    public String getKatuosoite() {
+        return katuosoite;
     }
 
-    public void setOsoite(String osoite) {
-        this.osoite = osoite;
+    public void setKatuosoite(String katuosoite) {
+        this.katuosoite = katuosoite;
     }
 
     public String getKaupunki() {
@@ -59,6 +60,6 @@ public class Osoite {
 
     @Override
     public String toString() {
-        return ""+osoite+", "+kaupunki+", "+zip+", "+maa;
+        return ""+ katuosoite +", "+kaupunki+", "+zip+", "+maa;
     }
 }
