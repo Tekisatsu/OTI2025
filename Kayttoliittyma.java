@@ -20,6 +20,7 @@ import javafx.collections.ObservableList;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Kayttoliittyma extends Application {
@@ -69,7 +70,7 @@ public class Kayttoliittyma extends Application {
         MenuItem menuMokki = new MenuItem("Mökit");
         MenuItem menuAsiakas = new MenuItem("Asiakas");
         MenuItem menuLasku = new MenuItem("Lasku");
-        MenuItem menuOsoite = new MenuItem("Osoite")
+        MenuItem menuOsoite = new MenuItem("Osoite");
         MenuItem menuRaportointi = new MenuItem("Majoituksen raportointi");
 
         menuValikko.getItems().addAll(menuVaraus, menuMokki, menuAsiakas, menuLasku, menuOsoite, menuRaportointi);
@@ -356,140 +357,7 @@ public class Kayttoliittyma extends Application {
         //------------------------------------------------------------------------------------------
         //ASIAKAS -entiteetti
 
-        HBox asiakasPohja = new HBox();
-        asiakasPohja.setAlignment(Pos.CENTER);
-        asiakasPohja.setStyle("-fx-background-color: lightgray;");
-        asiakasPohja.setPadding(new Insets(30));
-
-        VBox asiakasVbox = new VBox(20);
-        asiakasVbox.setAlignment(Pos.TOP_LEFT);
-        asiakasVbox.setPadding(new Insets(20));
-        asiakasVbox.setPrefWidth(500);
-
-        Label asiakasOtsikko = new Label("Asiakas");
-        asiakasOtsikko.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-
-        GridPane asiakasGrid = new GridPane();
-        asiakasGrid.setHgap(15);
-        asiakasGrid.setVgap(15);
-        asiakasGrid.setPadding(new Insets(20));
-        asiakasGrid.setAlignment(Pos.TOP_LEFT);
-
-        asiakasGrid.add(new Label("ID:"), 0, 0);
-        TextField asiakasIdKentta = new TextField();
-        asiakasGrid.add(asiakasIdKentta, 1, 0);
-
-        asiakasGrid.add(new Label("Nimi:"), 0, 1);
-        TextField asiakasNimiKentta = new TextField();
-        asiakasGrid.add(asiakasNimiKentta, 1, 1);
-
-        asiakasGrid.add(new Label("Sähköposti:"), 0, 2);
-        TextField sahkopostiKentta = new TextField();
-        asiakasGrid.add(sahkopostiKentta, 1, 2);
-
-        asiakasGrid.add(new Label("Puhelinnumero:"), 0, 3);
-        TextField puhelinnumeroKentta = new TextField();
-        asiakasGrid.add(puhelinnumeroKentta, 1, 3);
-
-        asiakasGrid.add(new Label("Osoite ID:"), 2, 2);
-        TextField asiakasOsoiteIdKentta = new TextField();
-        asiakasGrid.add(asiakasOsoiteIdKentta, 3, 2);
-
-        asiakasGrid.add(new Label("Varaukset:"), 2, 3);
-        TextField varauksetKentta = new TextField();
-        asiakasGrid.add(varauksetKentta, 3, 3);
-
-        //Asiakas TableView
-        ObservableList<Asiakas> asiakkaat = FXCollections.observableArrayList(tietokantaYhteysAsiakas.getAllAsiakkaat());
-        TableView<Asiakas> asiakasTable = new TableView<>(asiakkaat);
-        asiakasTable.setPrefHeight(400);
-        asiakasTable.setPrefWidth(200);
-        asiakasTable.setStyle("-fx-background-color: white; -fx-border-color: gray;");
-        TableColumn<Asiakas, Integer> asiakasIdCol = new TableColumn<>("id");
-        asiakasIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        TableColumn<Asiakas, String> asiakasNimiCol = new TableColumn<>("nimi");
-        asiakasNimiCol.setCellValueFactory(new PropertyValueFactory<>("nimi"));
-        TableColumn<Asiakas, String> asiakasSpostiCol = new TableColumn<>("sähköposti");
-        asiakasSpostiCol.setCellValueFactory(new PropertyValueFactory<>("sahkoposti"));
-        TableColumn<Asiakas, String> puhCol = new TableColumn<>("puhelinnumero");
-        puhCol.setCellValueFactory(new PropertyValueFactory<>("puhelinnumero"));
-        TableColumn<Asiakas, String> asiakasOsoiteCol = new TableColumn<>("osoite");
-        asiakasOsoiteCol.setCellValueFactory(new PropertyValueFactory<>("osoite"));
-
-        asiakasTable.getColumns().setAll(asiakasIdCol, asiakasNimiCol,asiakasSpostiCol,puhCol,asiakasOsoiteCol);
-
-        //tallenna ja peruuta - nappi
-        HBox riviButtoneille3 = new HBox(30);
-        Button btnTallenna3 = new Button("Tallenna");
-        Button btnPeruuta3 = new Button("Peruuta");
-        riviButtoneille3.getChildren().addAll(btnTallenna3, btnPeruuta3);
-        riviButtoneille3.setAlignment(Pos.CENTER_LEFT);
-
-        asiakasVbox.getChildren().addAll(asiakasOtsikko, asiakasGrid, riviButtoneille3, asiakasTable);
-        asiakasPohja.getChildren().add(asiakasVbox);
-        paneeli.setCenter(asiakasPohja);
-
-        //tapahtumankäsittelijä tallenna napille
-        btnTallenna3.setOnAction(ActionEvent -> {
-            try {
-                int id = Integer.parseInt(asiakasIdKentta.getText());
-                String nimi = asiakasNimiKentta.getText();
-                String sahkoposti = sahkopostiKentta.getText();
-                String puhelinnumero = puhelinnumeroKentta.getText();
-                //osoiteid lukeminen
-                int osoiteId = Integer.parseInt(asiakasOsoiteIdKentta.getText());
-                // 17:45 Osoite osoite = tietokantaYhteysOsoite.getOsoiteTK(osoiteId);
-
-                //varausten käsittely
-                List<Varaus> varaukset = new ArrayList<>();
-                String[] varausIdt = varauksetKentta.getText().split(",");
-                for (String idStr : varausIdt) {
-                    if (!idStr.isBlank()) {
-                        try {
-                            int varausId = Integer.parseInt(idStr.trim());
-                            Varaus varaus = tietokantaYhteysVaraus.getVaraus(varausId);
-                            if (varaus != null) {
-                                varaukset.add(varaus);
-                            } else {
-                                Alert virhe = new Alert(Alert.AlertType.WARNING, "Varaus ID ei löytynyt: " + varausId);
-                                virhe.show();
-                            }
-                        } catch (NumberFormatException e) {
-                            Alert virhe = new Alert(Alert.AlertType.WARNING, "Virheellinen varaus ID: " + idStr);
-                            virhe.show();
-                        }
-                    }
-                }
-
-
-                //luodaan olio johon kenttien arvot asetetaan
-                Asiakas asiakas = new Asiakas();
-                asiakas.setId(id);
-                asiakas.setNimi(nimi);
-                asiakas.setSahkoposti(sahkoposti);
-                asiakas.setPuhelinnumero(puhelinnumero);
-                // 17:45 asiakas.setOsoite(osoite);
-                // 17:45 asiakas.setVaraukset(varaukset);
-
-                //tallennetaan asiakas olio tietokantaan
-                tietokantaYhteysAsiakas.createAsiakas(asiakas);
-
-            } catch (NumberFormatException e) {
-                Alert virhe3 = new Alert(Alert.AlertType.WARNING, "Varmista, että syötteet ovat oikeassa muodossa.");
-                virhe3.show();
-            }
-        });
-
-        //tapahtumankäsittelijä peruuta napille
-        btnPeruuta3.setOnAction(e -> {
-            asiakasIdKentta.clear();
-            asiakasNimiKentta.clear();
-            sahkopostiKentta.clear();
-            puhelinnumeroKentta.clear();
-            asiakasOsoiteIdKentta.clear();
-            varauksetKentta.clear();
-        });
-
+        // Tälle luotu oma metodi alempana
 
         //------------------------------------------------------------------------------------
         //LASKU -entiteetti
@@ -518,7 +386,7 @@ public class Kayttoliittyma extends Application {
             paneeli.setCenter(luoLaskuNakyma());
         });
         menuAsiakas.setOnAction(e -> {
-            paneeli.setCenter(asiakasVbox);
+            paneeli.setCenter(luoAsiakasNakyma());
         });
         menuOsoite.setOnAction(e -> {
             paneeli.setCenter(luoOsoiteNakyma());
@@ -595,6 +463,184 @@ public class Kayttoliittyma extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    // Asiakasnäkymän luonti
+    public VBox luoAsiakasNakyma() {
+
+        VBox asiakasVbox = new VBox(20);
+        asiakasVbox.setStyle("-fx-background-color: lightgray;");
+        asiakasVbox.setAlignment(Pos.CENTER_LEFT);
+        asiakasVbox.setPadding(new Insets(30));
+
+        Label asiakasOtsikko = new Label("Asiakas");
+        asiakasOtsikko.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+
+        // Tekstikenttien luonti
+        GridPane asiakasGrid = new GridPane();
+        asiakasGrid.setHgap(15);
+        asiakasGrid.setVgap(15);
+        asiakasGrid.setPadding(new Insets(20));
+        asiakasGrid.setAlignment(Pos.TOP_LEFT);
+
+        asiakasGrid.add(new Label("Nimi:"), 0, 1);
+        TextField asiakasNimiKentta = new TextField();
+        asiakasGrid.add(asiakasNimiKentta, 1, 1);
+
+        asiakasGrid.add(new Label("Sähköposti:"), 0, 2);
+        TextField sahkopostiKentta = new TextField();
+        asiakasGrid.add(sahkopostiKentta, 1, 2);
+
+        asiakasGrid.add(new Label("Puhelinnumero:"), 0, 3);
+        TextField puhelinnumeroKentta = new TextField();
+        asiakasGrid.add(puhelinnumeroKentta, 1, 3);
+
+        // Osoitteiden näyttäminen
+        asiakasGrid.add(new Label("Osoite"), 0, 4);
+        ComboBox<Osoite> osoiteComboBox = new ComboBox<>();
+        TietokantaYhteysOsoite yhteysOsoite = new TietokantaYhteysOsoite();
+        List<Osoite> osoitteet = yhteysOsoite.getAllOsoitteet();
+        osoitteet.sort((Comparator.comparing(Osoite::getKatuosoite))); // Järjestetään katuosoitteen mukaan
+        osoiteComboBox.setItems(FXCollections.observableArrayList(osoitteet));
+        asiakasGrid.add(osoiteComboBox, 1, 4);
+
+        osoiteComboBox.setCellFactory(cb -> new ListCell<>() {
+            @Override
+            protected void updateItem(Osoite item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : item.getKatuosoite() + ", " + item.getKaupunki() + ", " + item.getMaa() + ", " + item.getZip());
+            }
+        });
+        osoiteComboBox.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Osoite item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : item.getKatuosoite() + ", " + item.getKaupunki() + ", " + item.getMaa() + ", " + item.getZip());
+            }
+        });
+
+        // Painikkeet lisäämiselle, päivittämiselle, ja poistamiselle
+        HBox riviButtoneille3 = new HBox(30);
+        Button btnLisaa3 = new Button("Lisää");
+        Button btnPaivita3 = new Button("Päivitä");
+        Button btnPoista3 = new Button("Poista");
+        btnPaivita3.setVisible(false);
+        btnPoista3.setVisible(false);
+        riviButtoneille3.getChildren().addAll(btnLisaa3, btnPaivita3, btnPoista3);
+        riviButtoneille3.setAlignment(Pos.CENTER_LEFT);
+
+        // Taulukko aikaisempien asiakkaiden tarkastelulle
+        TableView<Asiakas> asiakasTable = new TableView<>();
+        asiakasTable.setPrefSize(700, 400);
+        asiakasTable.setStyle("-fx-border-color: gray;");
+
+        // Taulukon sarakkeeet
+        TableColumn<Asiakas, Integer> asiakasIdCol = new TableColumn<>("ID");
+        asiakasIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<Asiakas, String> asiakasNimiCol = new TableColumn<>("Nimi");
+        asiakasNimiCol.setCellValueFactory(new PropertyValueFactory<>("nimi"));
+        TableColumn<Asiakas, String> asiakasSpostiCol = new TableColumn<>("Sähköposti");
+        asiakasSpostiCol.setCellValueFactory(new PropertyValueFactory<>("sahkoposti"));
+        TableColumn<Asiakas, String> puhCol = new TableColumn<>("Puhelinnumero");
+        puhCol.setCellValueFactory(new PropertyValueFactory<>("puhelinnumero"));
+        TableColumn<Asiakas, String> asiakasOsoiteCol = new TableColumn<>("Osoite");
+        asiakasOsoiteCol.setCellValueFactory(new PropertyValueFactory<>("osoite"));
+
+        asiakasTable.getColumns().setAll(asiakasIdCol, asiakasNimiCol, asiakasSpostiCol, puhCol, asiakasOsoiteCol);
+
+        // Täytetään taulukko tietokannan avulla aina kun näkymä alustetaan
+        ObservableList<Asiakas> asiakasData = FXCollections.observableArrayList(new TietokantaYhteysAsiakas().getAllAsiakkaat());
+        asiakasTable.setItems(asiakasData);
+
+        // Korostamalla asiakkaita saadaan täytettyä tekstikentät valmiiksi
+        asiakasTable.getSelectionModel().selectedItemProperty().addListener((obs, vanha, uusi) -> {
+            boolean valittu = uusi != null;
+            btnPaivita3.setVisible(valittu);
+            btnPoista3.setVisible(valittu);
+
+            if (valittu) {
+                asiakasNimiKentta.setText(uusi.getNimi());
+                sahkopostiKentta.setText(uusi.getSahkoposti());
+                puhelinnumeroKentta.setText(uusi.getPuhelinnumero());
+                osoiteComboBox.setValue(uusi.getOsoite());
+            }
+        });
+
+        // Klikkaus taulukon ulkopuolella tyhjentää valinnan ja kentät
+        asiakasVbox.setOnMouseClicked(event -> {
+
+            // Jos klikattu ei ollut taulukko tai mikään sen lapsi
+            if (!asiakasTable.equals(event.getTarget()) && !asiakasTable.isHover()) {
+                // Tyhjennetään valinta
+                asiakasTable.getSelectionModel().clearSelection();
+
+                // Tyhjennetään kentät
+                asiakasNimiKentta.clear();
+                sahkopostiKentta.clear();
+                puhelinnumeroKentta.clear();
+                osoiteComboBox.setValue(null);
+            }
+        });
+
+        // Asiakkaiden lisääminen taulukkoon
+        btnLisaa3.setOnAction(e -> {
+            try {
+                TietokantaYhteysAsiakas yhteysAsiakas = new TietokantaYhteysAsiakas();
+
+                String nimi = asiakasNimiKentta.getText();
+                String sahkoposti = sahkopostiKentta.getText();
+                String puhelinnumero = puhelinnumeroKentta.getText();
+                Osoite osoite = osoiteComboBox.getValue();
+                Asiakas asiakas = new Asiakas("0", nimi, sahkoposti, puhelinnumero, osoite);
+
+                yhteysAsiakas.createAsiakas(asiakas);
+
+                asiakasTable.setItems(FXCollections.observableArrayList(yhteysAsiakas.getAllAsiakkaat()));
+
+            } catch (Exception ex) {
+                System.err.println("Virhe lisättäessä: " + ex.getMessage());
+            }
+        });
+
+        // Asiakkaan päivittäminen
+        btnPaivita3.setOnAction(e -> {
+            Asiakas valittu = asiakasTable.getSelectionModel().getSelectedItem();
+            if (valittu != null) {
+                try {
+                    valittu.setNimi(asiakasNimiKentta.getText());
+                    valittu.setSahkoposti(sahkopostiKentta.getText());
+                    valittu.setPuhelinnumero(puhelinnumeroKentta.getText());
+                    valittu.setOsoite(osoiteComboBox.getValue());
+
+                    TietokantaYhteysAsiakas yhteysAsiakas = new TietokantaYhteysAsiakas();
+                    yhteysAsiakas.updateAsiakas(valittu);
+
+                    asiakasTable.setItems(FXCollections.observableArrayList(yhteysAsiakas.getAllAsiakkaat()));
+                } catch (Exception ex) {
+                    System.err.println("Virhe päivityksessä: " + ex.getMessage());
+                }
+            }
+        });
+
+        // Asiakkaan poistaminen taulukosta
+        btnPoista3.setOnAction(e -> {
+            Asiakas valittu = asiakasTable.getSelectionModel().getSelectedItem();
+            if (valittu != null) {
+                TietokantaYhteysAsiakas yhteysAsiakas = new TietokantaYhteysAsiakas();
+                yhteysAsiakas.deleteAsiakas(valittu.getId());
+
+                asiakasTable.setItems(FXCollections.observableArrayList(yhteysAsiakas.getAllAsiakkaat()));
+
+                // Tyhjennetään kentät
+                asiakasNimiKentta.clear();
+                sahkopostiKentta.clear();
+                puhelinnumeroKentta.clear();
+                osoiteComboBox.setValue(null);
+            }
+        });
+
+        asiakasVbox.getChildren().addAll(asiakasOtsikko, asiakasGrid, riviButtoneille3, asiakasTable);
+        return asiakasVbox;
     }
 
     // laskunäkymän luonti
@@ -1094,6 +1140,7 @@ public class Kayttoliittyma extends Application {
         raporttiVBox.getChildren().addAll(otsikko, pvmValinta, painikeHBox, raporttiTaulukko);
         return raporttiVBox;
     }
+    
     public ObservableList<VarausInfo> getVarausInfo(ObservableList<Varaus> list) {
         ObservableList<VarausInfo> varausInfo = FXCollections.observableArrayList();
         for (Varaus varaus : list) {
@@ -1104,6 +1151,7 @@ public class Kayttoliittyma extends Application {
         }
         return varausInfo;
     }
+    
     public boolean alreadyExists(Object o) {
         if (o instanceof Asiakas) {
             List<Asiakas> a = tietokantaYhteysAsiakas.getAllAsiakkaat();
