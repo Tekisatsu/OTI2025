@@ -12,12 +12,12 @@ public class Osoite {
         zip = 0;
     }
 
-    public Osoite(String id, String osoite, String kaupunki, String maa, String zip) {
-        this.id = Integer.parseInt(id);
+    public Osoite(int id, String osoite, String kaupunki, String maa, int zip) {
+        this.id = id;
         this.katuosoite = osoite;
         this.kaupunki = kaupunki;
         this.maa = maa;
-        this.zip = Integer.parseInt(zip);
+        this.zip = zip;
     }
     public int getId() {
         return id;
