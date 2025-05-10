@@ -225,133 +225,9 @@ public class Kayttoliittyma extends Application {
 
         //--------------------------------------------------------------------------------------------
         //MÖKIT -entiteetti
-        HBox mokkiPohja = new HBox();
-        mokkiPohja.setAlignment(Pos.CENTER);
-        mokkiPohja.setStyle("-fx-background-color: lightgray;");
-        mokkiPohja.setPadding(new Insets(30));
 
-        VBox mokkiVbox = new VBox(20);
-        mokkiVbox.setAlignment(Pos.TOP_LEFT);
-        mokkiVbox.setPadding(new Insets(20));
-        mokkiVbox.setPrefWidth(500);
-
-        Label mokitOtsikko = new Label("Mökit");
-        mokitOtsikko.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-
-        GridPane mokkiGrid = new GridPane();
-        mokkiGrid.setHgap(15);
-        mokkiGrid.setVgap(15);
-        mokkiGrid.setPadding(new Insets(20));
-        mokkiGrid.setAlignment(Pos.TOP_LEFT);
-
-        mokkiGrid.add(new Label("ID:"), 0, 0);
-        TextField mokkiIdKentta = new TextField();
-        mokkiGrid.add(mokkiIdKentta, 1, 0);
-
-        mokkiGrid.add(new Label("Nimi:"), 0, 1);
-        TextField mokkiNimiKentta = new TextField();
-        mokkiGrid.add(mokkiNimiKentta, 1, 1);
-
-        mokkiGrid.add(new Label("Tila:"), 0, 2);
-        TextField mokkiTilaKentta = new TextField();
-        mokkiGrid.add(mokkiTilaKentta, 1, 2);
-
-        mokkiGrid.add(new Label("Vuokrahinta:"), 2, 1);
-        TextField vuokrahintaKentta = new TextField();
-        mokkiGrid.add(vuokrahintaKentta, 3, 1);
-
-        mokkiGrid.add(new Label("Osoite ID:"), 2, 2);
-        TextField osoiteIdKentta = new TextField();
-        mokkiGrid.add(osoiteIdKentta, 3, 2);
-
-        //tallenna ja peruuta -nappi
-        HBox riviButtoneille2 = new HBox(30);
-        Button btnLisaa2 = new Button("Lisää");
-        Button btnPaivita2 = new Button("Päivitä");
-        Button btnPoista2 = new Button("Poista");
-        riviButtoneille2.getChildren().addAll(btnLisaa2, btnPaivita2, btnPoista2);
-        riviButtoneille2.setAlignment(Pos.CENTER_LEFT);
-
-        mokkiVbox.getChildren().addAll(mokitOtsikko, mokkiGrid, riviButtoneille2);
-
-        ObservableList<Mokki> mokit = FXCollections.observableArrayList(tietokantaYhteysMokki.readAllMokit());
-        TableView<Mokki> mokkiTable = new TableView<>(mokit);
-        mokkiTable.setPrefHeight(400);
-        mokkiTable.setPrefWidth(200);
-        mokkiTable.setStyle("-fx-background-color: white; -fx-border-color: gray;");
-        TableColumn<Mokki, Integer> idCol = new TableColumn<>("id");
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        TableColumn<Mokki, String> nameCol = new TableColumn<>("nimi");
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<Mokki, String> osoiteCol = new TableColumn<>("osoite");
-        osoiteCol.setCellValueFactory(new PropertyValueFactory<>("osoite"));
-        TableColumn<Mokki, String> vuokrahintaCol = new TableColumn<>("hinta");
-        vuokrahintaCol.setCellValueFactory(new PropertyValueFactory<>("vuokrahinta"));
-
-        mokkiTable.getColumns().setAll(idCol, nameCol,osoiteCol,vuokrahintaCol);
-        mokkiVbox.getChildren().addAll(mokkiTable);
-
-        mokkiPohja.getChildren().addAll(mokkiVbox);
-        paneeli.setCenter(mokkiPohja);
-
-        //tapahtumankäsittelijä lisää napille
-        btnLisaa2.setOnAction(ActionEvent -> {
-            try {
-                int id = Integer.parseInt(mokkiIdKentta.getText());
-                String name = mokkiNimiKentta.getText();
-                String tila = mokkiTilaKentta.getText();
-                double vuokrahinta = Double.parseDouble(vuokrahintaKentta.getText());
-                //haetaan osoite ID:n perusteella
-                int osoiteId = Integer.parseInt(osoiteIdKentta.getText());
-                Osoite osoite = yhteys.getOsoite(osoiteId);
-
-                //olio johon kenttien arvot asetetaan
-                Mokki mokki = new Mokki(id, name, tila, vuokrahinta, osoite);
-
-                TietokantaYhteysMokki yhteys = new TietokantaYhteysMokki();
-                yhteys.createMokki(mokki);
-
-                mokkiTable.setItems(FXCollections.observableArrayList(yhteys.readAllMokit()));
-                mokkiTable.getSelectionModel().clearSelection();
-            } catch (Exception ex) {
-                System.err.println("Virhe lisättäessä: " + ex.getMessage());
-            }
-        });
-
-        //tapahtumankäsittelijä päivitä napille
-        btnPaivita2.setOnAction(e -> {
-            Mokki valittu = mokkiTable.getSelectionModel().getSelectedItem();
-            if (valittu != null) {
-                try {
-                    valittu.setId(Integer.parseInt(mokkiIdKentta.getText()));
-                    valittu.setName(mokkiNimiKentta.getText());
-                    valittu.setTila(mokkiTilaKentta.getText());
-                    valittu.setVuokrahinta(Double.parseDouble(vuokrahintaKentta.getText()));
-                    int osoiteId = Integer.parseInt(osoiteIdKentta.getText());
-                    valittu.setOsoiteId(osoiteId);
-
-                    TietokantaYhteysMokki yhteys = new TietokantaYhteysMokki();
-                    yhteys.updateMokki(valittu);
-
-                    mokkiTable.setItems(FXCollections.observableArrayList(yhteys.readAllMokit()));
-                    mokkiTable.getSelectionModel().clearSelection();
-
-                } catch (Exception ex) {
-                    System.err.println("Virhe päivitettäessä: " + ex.getMessage());
-                }
-            }
-        });
-
-        //tapahtumankäsittelijä poista napille
-        btnPoista2.setOnAction(e -> {
-            Mokki valittu = mokkiTable.getSelectionModel().getSelectedItem();
-            if (valittu != null) {
-                yhteys.deleteMokki(valittu.getId());
-                mokkiTable.setItems(FXCollections.observableArrayList(yhteys.readAllMokit()));
-                mokkiTable.getSelectionModel().clearSelection();
-            }
-        });
-
+        // Tälle luotu oma metodi alempana
+        
         //------------------------------------------------------------------------------------------
         //ASIAKAS -entiteetti
 
@@ -378,7 +254,7 @@ public class Kayttoliittyma extends Application {
             paneeli.setCenter(varausVbox);
         });
         menuMokki.setOnAction(e -> {
-            paneeli.setCenter(mokkiVbox);
+            paneeli.setCenter(luoMokkiNakyma());
         });
         menuLasku.setOnAction(e -> {
             paneeli.setCenter(luoLaskuNakyma());
@@ -463,6 +339,191 @@ public class Kayttoliittyma extends Application {
         launch(args);
     }
 
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    // Mokkinäkymän luonti
+    public VBox luoMokkiNakyma() {
+
+        VBox mokkiVbox = new VBox(20);
+        mokkiVbox.setStyle("-fx-background-color: lightgray;");
+        mokkiVbox.setAlignment(Pos.CENTER_LEFT);
+        mokkiVbox.setPadding(new Insets(30));
+
+        Label mokkiOtsikko = new Label("Mokki");
+        mokkiOtsikko.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+
+        // Tekstikenttien luonti
+        GridPane mokkiGrid = new GridPane();
+        mokkiGrid.setHgap(15);
+        mokkiGrid.setVgap(15);
+        mokkiGrid.setPadding(new Insets(20));
+        mokkiGrid.setAlignment(Pos.TOP_LEFT);
+
+        mokkiGrid.add(new Label("Nimi:"), 0, 1);
+        TextField nimiKentta = new TextField();
+        mokkiGrid.add(nimiKentta, 1, 1);
+
+        // Osoitteiden näyttäminen
+        mokkiGrid.add(new Label("Osoite"), 0, 2);
+        ComboBox<Osoite> osoiteComboBox = new ComboBox<>();
+        TietokantaYhteysOsoite yhteysOsoite = new TietokantaYhteysOsoite();
+        List<Osoite> osoitteet = yhteysOsoite.getAllOsoitteet();
+        osoitteet.sort((Comparator.comparing(Osoite::getKatuosoite))); // Järjestetään katuosoitteen mukaan
+        osoiteComboBox.setItems(FXCollections.observableArrayList(osoitteet));
+        mokkiGrid.add(osoiteComboBox, 1, 2);
+
+        // Miltä valikko näyttää sisältäpäin
+        osoiteComboBox.setCellFactory(cb -> new ListCell<>() {
+            @Override
+            protected void updateItem(Osoite item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : item.getKatuosoite() + ", " + item.getKaupunki() + ", " + item.getMaa() + ", " + item.getZip());
+            }
+        });
+        // Miltä valikko näyttää ulkoapäin
+        osoiteComboBox.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Osoite item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : item.getKatuosoite() + ", " + item.getKaupunki() + ", " + item.getMaa() + ", " + item.getZip());
+            }
+        });
+
+        mokkiGrid.add(new Label("Tila:"), 0, 3);
+        ComboBox<String> tilaComboBox = new ComboBox<>();
+        tilaComboBox.getItems().addAll("Saatavissa", "Varattu");
+        mokkiGrid.add(tilaComboBox, 1, 3);
+
+        mokkiGrid.add(new Label("Vuokrahinta:"), 0, 4);
+        TextField hintaKentta = new TextField();
+        mokkiGrid.add(hintaKentta, 1, 4);
+
+        // Painikkeet lisäämiselle, päivittämiselle, ja poistamiselle
+        HBox riviButtoneille2 = new HBox(30);
+        Button btnLisaa2 = new Button("Lisää");
+        Button btnPaivita2 = new Button("Päivitä");
+        Button btnPoista2 = new Button("Poista");
+        btnPaivita2.setVisible(false);
+        btnPoista2.setVisible(false);
+        riviButtoneille2.getChildren().addAll(btnLisaa2, btnPaivita2, btnPoista2);
+        riviButtoneille2.setAlignment(Pos.CENTER_LEFT);
+
+        // Taulukko aikaisempien mökkien tarkastelulle
+        TableView<Mokki> mokkiTable = new TableView<>();
+        mokkiTable.setPrefSize(700, 400);
+        mokkiTable.setStyle("-fx-border-color: gray;");
+
+        // Taulukon sarakkeeet
+        TableColumn<Mokki, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        TableColumn<Mokki, String> nimiCol = new TableColumn<>("Nimi");
+        nimiCol.setCellValueFactory(new PropertyValueFactory<>("nimi"));
+        TableColumn<Mokki, Osoite> osoiteCol = new TableColumn<>("Osoite");
+        osoiteCol.setCellValueFactory(new PropertyValueFactory<>("osoite"));
+        TableColumn<Mokki, String> tilaCol = new TableColumn<>("Tila");
+        tilaCol.setCellValueFactory(new PropertyValueFactory<>("tila"));
+        TableColumn<Mokki, Double> hintaCol = new TableColumn<>("Vuokrahinta");
+        hintaCol.setCellValueFactory(new PropertyValueFactory<>("vuokrahinta"));
+
+        mokkiTable.getColumns().setAll(idCol, nimiCol, osoiteCol, tilaCol, hintaCol);
+
+        // Täytetään taulukko tietokannan avulla aina kun näkymä alustetaan
+        ObservableList<Mokki> mokkiData = FXCollections.observableArrayList(new TietokantaYhteysMokki().readAllMokit());
+        mokkiTable.setItems(mokkiData);
+
+        // Korostamalla mökkejä saadaan täytettyä tekstikentät valmiiksi
+        mokkiTable.getSelectionModel().selectedItemProperty().addListener((obs, vanha, uusi) -> {
+            boolean valittu = uusi != null;
+            btnPaivita2.setVisible(valittu);
+            btnPoista2.setVisible(valittu);
+
+            if (valittu) {
+                nimiKentta.setText(uusi.getNimi());
+                osoiteComboBox.setValue(uusi.getOsoite());
+                tilaComboBox.setValue(uusi.getTila());
+                hintaKentta.setText(String.valueOf(uusi.getVuokrahinta()));
+            }
+        });
+
+        // Klikkaus taulukon ulkopuolella tyhjentää valinnan ja kentät
+        mokkiVbox.setOnMouseClicked(event -> {
+
+            // Jos klikattu ei ollut taulukko tai mikään sen lapsi
+            if (!mokkiTable.equals(event.getTarget()) && !mokkiTable.isHover()) {
+                // Tyhjennetään valinta
+                mokkiTable.getSelectionModel().clearSelection();
+
+                // Tyhjennetään kentät
+                nimiKentta.clear();
+                osoiteComboBox.setValue(null);
+                tilaComboBox.setValue(null);
+                hintaKentta.clear();
+            }
+        });
+
+        // Mökkien lisääminen taulukkoon
+        btnLisaa2.setOnAction(e -> {
+            try {
+                TietokantaYhteysMokki yhteysMokki = new TietokantaYhteysMokki();
+
+                String nimi = nimiKentta.getText();
+                Osoite osoite = osoiteComboBox.getValue();
+                String tila = tilaComboBox.getValue();
+                double vuokrahinta = Double.parseDouble(hintaKentta.getText());
+                Mokki mokki = new Mokki(0, nimi, osoite, tila, vuokrahinta);
+
+                yhteysMokki.createMokki(mokki);
+
+                mokkiTable.setItems(FXCollections.observableArrayList(yhteysMokki.readAllMokit()));
+
+            } catch (Exception ex) {
+                System.err.println("Virhe lisättäessä: " + ex.getMessage());
+            }
+        });
+
+        // Mökin päivittäminen
+        btnPaivita2.setOnAction(e -> {
+            Mokki valittu = mokkiTable.getSelectionModel().getSelectedItem();
+            if (valittu != null) {
+                try {
+                    valittu.setNimi(nimiKentta.getText());
+                    valittu.setOsoite(osoiteComboBox.getValue());
+                    valittu.setTila(tilaComboBox.getValue());
+                    valittu.setVuokrahinta(Double.parseDouble(hintaKentta.getText()));
+
+                    TietokantaYhteysMokki yhteysMokki = new TietokantaYhteysMokki();
+                    yhteysMokki.updateMokki(valittu);
+
+                    mokkiTable.setItems(FXCollections.observableArrayList(yhteysMokki.readAllMokit()));
+                } catch (Exception ex) {
+                    System.err.println("Virhe päivityksessä: " + ex.getMessage());
+                }
+            }
+        });
+
+        // Mökin poistaminen taulukosta
+        btnPoista2.setOnAction(e -> {
+            Mokki valittu = mokkiTable.getSelectionModel().getSelectedItem();
+            if (valittu != null) {
+                TietokantaYhteysMokki yhteysMokki = new TietokantaYhteysMokki();
+                yhteysMokki.deleteMokki(valittu.getId());
+
+                mokkiTable.setItems(FXCollections.observableArrayList(yhteysMokki.readAllMokit()));
+
+                // Tyhjennetään kentät
+                nimiKentta.clear();
+                osoiteComboBox.setValue(null);
+                tilaComboBox.setValue(null);
+                hintaKentta.clear();
+            }
+        });
+
+        mokkiVbox.getChildren().addAll(mokkiOtsikko, mokkiGrid, riviButtoneille2, mokkiTable);
+        return mokkiVbox;
+    }
+
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
     // Asiakasnäkymän luonti
     public VBox luoAsiakasNakyma() {
 
@@ -643,6 +704,8 @@ public class Kayttoliittyma extends Application {
         return asiakasVbox;
     }
 
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
     // laskunäkymän luonti
     public VBox luoLaskuNakyma() {
 
@@ -844,6 +907,8 @@ public class Kayttoliittyma extends Application {
         return laskuVbox;
     }
 
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
     // Osoitenäkymän luonti
     public VBox luoOsoiteNakyma() {
 
@@ -1008,6 +1073,8 @@ public class Kayttoliittyma extends Application {
         return osoiteVbox;
     }
 
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
     // raportointinäkymän luonti
     public VBox luoRaportointiNakyma() {
 
