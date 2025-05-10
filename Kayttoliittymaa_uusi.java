@@ -1,5 +1,3 @@
-package org.example.demo14;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,8 +23,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.sql.*;
 
-public class Kayttoliittyma extends Application {
-    TietokantaYhteysMokki tietokantaYhteysMokki = new TietokantaYhteysMokki();
+public class Kayttoliittymaa_uusi {
+//public class Kayttoliittymaa_uusi extends Application {}
+/*TietokantaYhteysMokki tietokantaYhteysMokki = new TietokantaYhteysMokki();
     TietokantaYhteysAsiakas tietokantaYhteysAsiakas = new TietokantaYhteysAsiakas();
     TietokantaYhteysVaraus tietokantaYhteysVaraus = new TietokantaYhteysVaraus();
     TietokantaYhteysLasku tietokantaYhteysLasku = new TietokantaYhteysLasku();
@@ -1305,82 +1304,5 @@ public class Kayttoliittyma extends Application {
         }
         return false;
     }
-}
-
-class HenkilokuntaTiedot {
-    private int id;
-    private String kayttajatunnus;
-    private String salasana;
-    private String kayttoikeus;
-
-    public int getHenkilokuntaId() {
-        return id;
-    }
-
-    public void setHenkilokuntaId(int id) {
-        this.id = id;
-    }
-
-    public String getKayttajatunnus() {
-        return kayttajatunnus;
-    }
-
-    public void setKayttajatunnus(String kayttajatunnus) {
-        this.kayttajatunnus = kayttajatunnus;
-    }
-
-    public String getSalasana() {
-        return salasana;
-    }
-
-    public void setSalasana(String salasana) {
-        this.salasana = salasana;
-    }
-
-    public String getKayttoikeus() {
-        return kayttoikeus;
-    }
-
-    public void setKayttoikeus(String kayttoikeus) {
-        this.kayttoikeus = kayttoikeus;
-    }
-
-    @Override
-    public String toString() {
-        return "HenkilokuntaTiedot{" +
-                "id=" + id +
-                ", kayttajatunnus='" + kayttajatunnus + '\'' +
-                ", kayttoikeus='" + kayttoikeus + '\'' +
-                '}';
-    }
-}
-
-class Henkilokunta {
-    private String url = "jdbc:mysql://localhost:3306/mokki_varaus?useSSL=false";
-    private String kayttajanimi = "root";
-    private String salasana = "tietokantaSalasana";
-
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, kayttajanimi, salasana);
-    }
-
-    public HenkilokuntaTiedot login(String kayttajatunnus, String salasana) {
-        String sql = "SELECT * FROM HENKILOKUNTA WHERE Kayttajatunnus = ? AND Salasana = ?";
-        try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
-            stmt.setString(1, kayttajatunnus);
-            stmt.setString(2, salasana);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                HenkilokuntaTiedot henkilokunta = new HenkilokuntaTiedot();
-                henkilokunta.setHenkilokuntaId(rs.getInt("ID"));
-                henkilokunta.setKayttajatunnus(rs.getString("Kayttajatunnus"));
-                henkilokunta.setSalasana(rs.getString("Salasana"));
-                henkilokunta.setKayttoikeus(rs.getString("Kayttoikeus"));
-                return henkilokunta;
-            }
-        } catch (SQLException e) {
-            System.err.println("Virhe kirjautumisen yhteydessä: " + e.getMessage());
-        }
-        return null;
-    }
+}*/
 }

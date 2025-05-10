@@ -5,6 +5,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -16,6 +17,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,8 +31,14 @@ public class Kayttoliittyma extends Application {
     TietokantaYhteysAsiakas tietokantaYhteysAsiakas = new TietokantaYhteysAsiakas();
     TietokantaYhteysVaraus tietokantaYhteysVaraus = new TietokantaYhteysVaraus();
     TietokantaYhteysLasku tietokantaYhteysLasku = new TietokantaYhteysLasku();
+    private Henkilokunta henkilokunta = new Henkilokunta();
+    private Stage primaryStage;
     public void start(Stage primarystage) {
         //POP UP IKKUNA
+        this.primaryStage = primarystage;
+        loggausNakyma();
+    }
+    void paanakyma(){
         VBox alku = new VBox(15);
         alku.setAlignment(Pos.CENTER);
         alku.setPadding(new Insets(20));
@@ -227,7 +238,7 @@ public class Kayttoliittyma extends Application {
         //MÖKIT -entiteetti
 
         // Tälle luotu oma metodi alempana
-        
+
         //------------------------------------------------------------------------------------------
         //ASIAKAS -entiteetti
 
@@ -330,9 +341,9 @@ public class Kayttoliittyma extends Application {
         //--------------------------------------------------------------------
 
         Scene scene = new Scene(paneeli, 1100, 750);
-        primarystage.setTitle("Mökkien varaaminen");
-        primarystage.setScene(scene);
-        primarystage.show();
+        primaryStage.setTitle("Mökkien varaaminen");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
@@ -1280,5 +1291,56 @@ public class Kayttoliittyma extends Application {
             return false;
         }
         return false;
+    }
+    void loggausNakyma() {
+        VBox loggaus = new VBox(15);
+        loggaus.setAlignment(Pos.CENTER);
+        loggaus.setPadding(new Insets(20));
+        loggaus.setStyle("-fx-background-color: #f4f4f4;");
+
+        Label loggausLabel = new Label("Kirjaudu sisään");
+        loggausLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
+        TextField kayttajanimikentta = new TextField();
+        kayttajanimikentta.setPromptText("Käyttäjätunnus");
+        kayttajanimikentta.setPrefWidth(250);
+        kayttajanimikentta.setMaxWidth(250);
+
+        PasswordField salasanakentta = new PasswordField();
+        salasanakentta.setPromptText("Salasana");
+        salasanakentta.setPrefWidth(250);
+        salasanakentta.setMaxWidth(250);
+
+        Button loggausPainike = new Button("Kirjaudu");
+        loggausPainike.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+        loggausPainike.setPrefWidth(150);
+
+        Text virheIlmoitus = new Text();
+        virheIlmoitus.setFill(Color.RED);
+
+        loggausPainike.setOnAction(e -> {
+            String kayttajanimi = kayttajanimikentta.getText().trim();
+            String salasana = salasanakentta.getText().trim();
+
+            if (kayttajanimi.isEmpty() || salasana.isEmpty()) {
+                virheIlmoitus.setText("Syötä käyttäjätunnus ja salasana!");
+                return;
+            }
+
+            HenkilokuntaTiedot kayttajatiedot = henkilokunta.login(kayttajanimi, salasana);
+            if (kayttajatiedot != null) {
+                virheIlmoitus.setText("");
+                paanakyma();
+            } else {
+                virheIlmoitus.setText("Virheellinen käyttäjätunnus tai salasana!");
+                salasanakentta.clear();
+            }
+        });
+
+        loggaus.getChildren().addAll(loggausLabel, kayttajanimikentta, salasanakentta, loggausPainike, virheIlmoitus);
+        Scene loggausScene = new Scene(loggaus, 400, 300);
+        primaryStage.setTitle("Mökkikodit - Sisäänkirjautuminen");
+        primaryStage.setScene(loggausScene);
+        primaryStage.show();
     }
 }
