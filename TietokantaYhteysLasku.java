@@ -38,14 +38,14 @@ public class TietokantaYhteysLasku {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Lasku(
-                        String.valueOf(rs.getInt("ID")),
+                        rs.getInt("ID"),
                         rs.getString("Viitenumero"),
                         rs.getDate("Erapaiva").toLocalDate(),
                         rs.getString("Maksaja"),
                         rs.getString("Saaja"),
                         rs.getString("Y_tunnus"),
-                        String.valueOf(rs.getDouble("ALV_prosentti")),
-                        String.valueOf(rs.getDouble("Maara"))
+                        rs.getDouble("ALV_prosentti"),
+                        rs.getDouble("Maara")
                 );
             }
         } catch (SQLException e) {
@@ -61,14 +61,14 @@ public class TietokantaYhteysLasku {
         try (Connection yhteys = getConnection(); Statement stmt = yhteys.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Lasku lasku = new Lasku(
-                        String.valueOf(rs.getInt("ID")),
+                        rs.getInt("ID"),
                         rs.getString("Viitenumero"),
                         rs.getDate("Erapaiva").toLocalDate(),
                         rs.getString("Maksaja"),
                         rs.getString("Saaja"),
                         rs.getString("Y_tunnus"),
-                        String.valueOf(rs.getDouble("ALV_prosentti")),
-                        String.valueOf(rs.getDouble("Maara"))
+                        rs.getDouble("ALV_prosentti"),
+                        rs.getDouble("Maara")
                 );
                 laskut.add(lasku);
             }
