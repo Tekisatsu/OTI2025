@@ -504,6 +504,7 @@ public class Kayttoliittyma extends Application {
         osoiteComboBox.setItems(FXCollections.observableArrayList(osoitteet));
         asiakasGrid.add(osoiteComboBox, 1, 4);
 
+        // Miltä valikko näyttää sisältäpäin
         osoiteComboBox.setCellFactory(cb -> new ListCell<>() {
             @Override
             protected void updateItem(Osoite item, boolean empty) {
@@ -511,6 +512,7 @@ public class Kayttoliittyma extends Application {
                 setText(empty || item == null ? "" : item.getKatuosoite() + ", " + item.getKaupunki() + ", " + item.getMaa() + ", " + item.getZip());
             }
         });
+        // Miltä valikko näyttää ulkoapäin
         osoiteComboBox.setButtonCell(new ListCell<>() {
             @Override
             protected void updateItem(Osoite item, boolean empty) {
