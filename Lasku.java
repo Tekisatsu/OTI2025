@@ -97,15 +97,6 @@ public class Lasku {
 
     @Override
     public String toString() {
-        return "Lasku{" +
-                "id=" + id +
-                ", viitenumero='" + viitenumero +
-                ", erapaiva=" + erapaiva + '\'' +
-                ", maksaja='" + maksaja + '\'' +
-                ", saaja=" + saaja + '\'' +
-                ", ytunnus='" + ytunnus + '\'' +
-                ", alvprosentti=" + alvprosentti +
-                ", maara='" + maara +
-                '}';
+        return viitenumero+", "+erapaiva+", "+maksaja+", "+maara;
     }
 }

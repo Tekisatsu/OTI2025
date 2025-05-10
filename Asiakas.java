@@ -74,12 +74,6 @@ public class Asiakas {
 
     @Override
     public String toString() {
-        return "Asiakas{" +
-                "id=" + id +
-                ", nimi='" + nimi + '\'' +
-                ", sahkoposti=" + sahkoposti + '\'' +
-                ", puhelinnumero='" + puhelinnumero + '\'' +
-                ", osoite=" + osoite +
-                '}';
+        return nimi+", "+sahkoposti+", "+puhelinnumero+", "+osoite;
     }
 }

@@ -72,12 +72,6 @@ public class Mokki {
 
     @Override
     public String toString() {
-        return "Mokki{" +
-                "id=" + id +
-                ", nimi='" + nimi + '\'' +
-                ", osoite=" + osoite +
-                ", tila='" + tila + '\'' +
-                ", vuokrahinta=" + vuokrahinta +
-                '}';
+        return nimi+", "+osoite;
     }
 }
