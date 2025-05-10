@@ -781,8 +781,8 @@ public class Kayttoliittyma extends Application {
                 double alv = Double.parseDouble(alvKentta.getText());
                 double maara = Double.parseDouble(maaraKentta.getText());
 
-                Lasku uusi = new Lasku("0", viitenumero, erapaiva, maksaja, saaja, ytunnus,
-                        String.valueOf(alv), String.valueOf(maara));
+                Lasku uusi = new Lasku(0, viitenumero, erapaiva, maksaja, saaja, ytunnus,
+                        alv, maara);
 
                 TietokantaYhteysLasku yhteys = new TietokantaYhteysLasku();
                 yhteys.createLasku(uusi);
