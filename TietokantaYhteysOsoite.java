@@ -33,11 +33,11 @@ public class TietokantaYhteysOsoite {
         try (Connection yhteys = getConnection(); Statement stmt = yhteys.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Osoite osoite = new Osoite(
-                        String.valueOf(rs.getInt("ID")),
+                        rs.getInt("ID")),
                         rs.getString("Katuosoite"),
                         rs.getString("Kaupunki"),
                         rs.getString("Maa"),
-                        rs.getString("Postinumero")
+                        rs.getInt("Postinumero")
                 );
                 osoitteet.add(osoite);
             }
