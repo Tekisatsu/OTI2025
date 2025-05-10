@@ -76,7 +76,7 @@ public class TietokantaYhteysAsiakas {
             while (rs.next()) {
                 Osoite osoite = getOsoiteTK(rs.getInt("Osoite_id"));
                 Asiakas asiakas = new Asiakas(
-                        String.valueOf(rs.getInt("ID")),
+                        rs.getInt("ID"),
                         rs.getString("Nimi"),
                         rs.getString("Sahkoposti"),
                         rs.getString("Puhelinnumero"),
