@@ -16,8 +16,8 @@ public class Asiakas {
         this.osoite = new Osoite();
     }
 
-    public Asiakas(String id, String nimi, String sahkoposti, String puhelinnumero, Osoite osoite) {
-        this.id = Integer.parseInt(id);
+    public Asiakas(int id, String nimi, String sahkoposti, String puhelinnumero, Osoite osoite) {
+        this.id = id;
         this.nimi = nimi;
         this.sahkoposti = sahkoposti;
         this.puhelinnumero = puhelinnumero;
