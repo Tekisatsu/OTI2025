@@ -187,7 +187,7 @@ public class Kayttoliittyma extends Application {
 
         //tapahtumankäsittelijä päivitä napille
         btnPaivita1.setOnAction(e -> {
-            Varaus valittu = varausTable.getSelectionModel().getSelectedItem();
+            Varaus valittu = convertVarausInfo(varausTable.getSelectionModel().getSelectedItem());
             if (valittu != null) {
                 try {
                     valittu.setAlkamispaivamaara(alkamisPvmPicker.getValue());
@@ -214,7 +214,7 @@ public class Kayttoliittyma extends Application {
             if (valittu != null) {
                 try {
                     tietokantaYhteysVaraus.deleteVaraus(valittu.getId());
-                    varausTable.setItems(FXCollections.observableArrayList(tietokantaYhteysVaraus.getAllVaraukset()));
+                    varausTable.setItems(FXCollections.observableArrayList(getVarausInfo(tietokantaYhteysVaraus.getAllVaraukset())));
                     varausTable.getSelectionModel().clearSelection();
 
                 } catch (Exception ex) {
@@ -1219,7 +1219,19 @@ public class Kayttoliittyma extends Application {
         }
         return varausInfo;
     }
-    
+
+    public Varaus convertVarausInfo(VarausInfo varausInfo) {
+        Varaus varaus = new Varaus();
+        varaus.setId(varausInfo.id);
+        varaus.setAsiakas_id(varausInfo.asiakas.getId());
+        varaus.setMokki_id(varausInfo.mokki.getId());
+        varaus.setLasku_id(varausInfo.lasku.getId());
+        varaus.setHenkilomaara(varausInfo.henkilomaara);
+        varaus.setAlkamispaivamaara(varausInfo.alkamispaivamaara);
+        varaus.setPaattumispaivamaara(varausInfo.paattumispaivamaara);
+        return varaus;
+    }
+
     public boolean alreadyExists(Object o) {
         if (o instanceof Asiakas) {
             List<Asiakas> a = tietokantaYhteysAsiakas.getAllAsiakkaat();
