@@ -13,7 +13,7 @@ public class TietokantaYhteysVaraus {
 
     // luo varaus
     public void createVaraus(Varaus varaus) {
-        String sql = "INSERT INTO VARAUS (Lasku_ID, Mokki_ID, Asiakas_ID,henkilomaara,Aloituspaivamaara, Paattymispaivamaara) " +
+        String sql = "INSERT INTO VARAUS (Lasku_ID, Mokki_ID, Asiakas_ID,henkilomaara,Aloituspaivamaara, Paattumispaivamaara) " +
                 "VALUES (?, ?, ?, ?, ?,?,)";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
             stmt.setInt(1, varaus.getLasku_id());

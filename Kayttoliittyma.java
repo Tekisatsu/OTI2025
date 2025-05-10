@@ -360,7 +360,7 @@ public class Kayttoliittyma extends Application {
         mokkiVbox.setAlignment(Pos.CENTER_LEFT);
         mokkiVbox.setPadding(new Insets(30));
 
-        Label mokkiOtsikko = new Label("Mokki");
+        Label mokkiOtsikko = new Label("Mökit");
         mokkiOtsikko.setFont(Font.font("Arial", FontWeight.BOLD, 18));
 
         // Tekstikenttien luonti
