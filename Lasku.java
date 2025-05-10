@@ -12,15 +12,15 @@ public class Lasku {
     private double alvprosentti;
     private double maara;
 
-    public Lasku(String id, String viitenumero, LocalDate erapaiva, String maksaja, String saaja, String ytunnus, String alvprosentti, String maara) {
-        this.id = Integer.parseInt(id);
+    public Lasku(int id, String viitenumero, LocalDate erapaiva, String maksaja, String saaja, String ytunnus, double alvprosentti, double maara) {
+        this.id = id;
         this.viitenumero = viitenumero;
         this.erapaiva = erapaiva;
         this.maksaja = maksaja;
         this.saaja = saaja;
         this.ytunnus = ytunnus;
-        this.alvprosentti = Double.parseDouble(alvprosentti);
-        this.maara = Double.parseDouble(maara);
+        this.alvprosentti = alvprosentti;
+        this.maara = maara;
     }
 
     public int getId() {
