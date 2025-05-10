@@ -2,21 +2,21 @@ import java.util.Objects;
 
 public class Mokki {
     int id;
-    String name;
+    String nimi;
     Osoite osoite;
     String tila;
     double vuokrahinta;
 
     public Mokki() {
         this.id = 0;
-        this.name = "";
+        this.nimi = "";
         this.osoite = new Osoite();
         this.tila = "";
         this.vuokrahinta = 0;
     }
-    public Mokki(int id, String name, Osoite osoite, String tila, double vuokrahinta) {
+    public Mokki(int id, String nimi, Osoite osoite, String tila, double vuokrahinta) {
         this.id = id;
-        this.name = name;
+        this.nimi = nimi;
         this.osoite = osoite;
         this.tila = tila;
         this.vuokrahinta = vuokrahinta;
@@ -46,12 +46,12 @@ public class Mokki {
         this.osoite = osoite;
     }
 
-    public String getName() {
-        return name;
+    public String getNimi() {
+        return nimi;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNimi(String nimi) {
+        this.nimi = nimi;
     }
 
     public int getId() {
@@ -67,14 +67,14 @@ public class Mokki {
         if (o == null || getClass() != o.getClass()) return false;
 
         Mokki mokki = (Mokki) o;
-        return Double.compare(vuokrahinta, mokki.vuokrahinta) == 0 && Objects.equals(name, mokki.name) && Objects.equals(osoite, mokki.osoite) && Objects.equals(tila, mokki.tila);
+        return Double.compare(vuokrahinta, mokki.vuokrahinta) == 0 && Objects.equals(nimi, mokki.nimi) && Objects.equals(osoite, mokki.osoite) && Objects.equals(tila, mokki.tila);
     }
 
     @Override
     public String toString() {
         return "Mokki{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", nimi='" + nimi + '\'' +
                 ", osoite=" + osoite +
                 ", tila='" + tila + '\'' +
                 ", vuokrahinta=" + vuokrahinta +
