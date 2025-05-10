@@ -20,7 +20,7 @@ public class TietokantaYhteysMokki {
             if (rs.next()) {
                 Osoite osoite = new Osoite();
                 osoite.setId(rs.getInt("ID"));
-                osoite.setOsoite(rs.getString("Katuosoite"));
+                osoite.setKatuosoite(rs.getString("Katuosoite"));
                 osoite.setKaupunki(rs.getString("Kaupunki"));
                 osoite.setMaa(rs.getString("Maa"));
                 osoite.setZip(rs.getInt("Postinumero"));
@@ -38,10 +38,10 @@ public class TietokantaYhteysMokki {
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
             stmt.setInt(1, mokki.getOsoite().getId());
             stmt.setDouble(2, mokki.getVuokrahinta());
-            stmt.setString(3, mokki.getName());
+            stmt.setString(3, mokki.getNimi());
             stmt.setString(4, mokki.getTila());
             stmt.executeUpdate();
-            System.out.println("Mokki luotu: " + mokki.getName());
+            System.out.println("Mokki luotu: " + mokki.getNimi());
         } catch (SQLException e) {
             System.err.println("Virhe mökin luonnissa: " + e.getMessage());
         }
@@ -58,7 +58,7 @@ public class TietokantaYhteysMokki {
                 mokki.setId(rs.getInt("ID"));
                 mokki.setOsoite(getOsoite(rs.getInt("Osoite_id")));
                 mokki.setVuokrahinta(rs.getDouble("Vuokrahinta"));
-                mokki.setName(rs.getString("Nimi"));
+                mokki.setNimi(rs.getString("Nimi"));
                 mokki.setTila(rs.getString("Tila"));
                 return mokki;
             }
@@ -78,7 +78,7 @@ public class TietokantaYhteysMokki {
                 mokki.setId(rs.getInt("ID"));
                 mokki.setOsoite(getOsoite(rs.getInt("Osoite_id")));
                 mokki.setVuokrahinta(rs.getDouble("Vuokrahinta"));
-                mokki.setName(rs.getString("Nimi"));
+                mokki.setNimi(rs.getString("Nimi"));
                 mokki.setTila(rs.getString("Tila"));
                 mokit.add(mokki);
             }
@@ -94,12 +94,12 @@ public class TietokantaYhteysMokki {
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
             stmt.setInt(1, mokki.getOsoite().getId());
             stmt.setDouble(2, mokki.getVuokrahinta());
-            stmt.setString(3, mokki.getName());
+            stmt.setString(3, mokki.getNimi());
             stmt.setString(4, mokki.getTila());
             stmt.setInt(5, mokki.getId());
             int kohdeRivit = stmt.executeUpdate();
             if (kohdeRivit > 0) {
-                System.out.println("Mökki päivitetty: " + mokki.getName());
+                System.out.println("Mökki päivitetty: " + mokki.getNimi());
             } else {
                 System.out.println("Ei mökkiä ID:llä " + mokki.getId());
             }
