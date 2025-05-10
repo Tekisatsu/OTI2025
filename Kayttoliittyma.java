@@ -389,6 +389,7 @@ public class Kayttoliittyma extends Application {
             }
         });
 
+        // Tilan valitseminen
         mokkiGrid.add(new Label("Tila:"), 0, 3);
         ComboBox<String> tilaComboBox = new ComboBox<>();
         tilaComboBox.getItems().addAll("Saatavissa", "Varattu");
