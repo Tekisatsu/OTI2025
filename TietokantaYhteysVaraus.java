@@ -21,7 +21,7 @@ public class TietokantaYhteysVaraus {
             stmt.setInt(3, varaus.getAsiakas_id());
             stmt.setInt(4, varaus.henkilomaara);
             stmt.setDate(5, Date.valueOf(varaus.getAlkamispaivamaara()));
-            stmt.setDate(6, Date.valueOf(varaus.getPaattymispaivamaara()));
+            stmt.setDate(6, Date.valueOf(varaus.getPaattumispaivamaara()));
             stmt.executeUpdate();
             System.out.println("Varaus luotu mökki ID:lle " + varaus.getMokki_id());
         } catch (SQLException e) {
@@ -84,7 +84,7 @@ public class TietokantaYhteysVaraus {
             stmt.setInt(2, varaus.getMokki_id());
             stmt.setInt(3, varaus.getAsiakas_id());
             stmt.setDate(4, Date.valueOf(varaus.getAlkamispaivamaara()));
-            stmt.setDate(5, Date.valueOf(varaus.getPaattymispaivamaara()));
+            stmt.setDate(5, Date.valueOf(varaus.getPaattumispaivamaara()));
             stmt.setInt(6, varaus.getId());
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
