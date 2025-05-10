@@ -142,7 +142,7 @@ public class Kayttoliittyma extends Application {
         varausVbox.getChildren().addAll(varausOtsikko, varausGrid, riviButtoneille1);
 
         //Varaus TableView
-        ObservableList<Varaus> varauksetList = FXCollections.observableArrayList(tietokantaYhteysVaraus.getAllVaraukset());
+        List<Varaus> varauksetList = tietokantaYhteysVaraus.getAllVaraukset();
         ObservableList<VarausInfo> varausInfoList = getVarausInfo(varauksetList);
         TableView<VarausInfo> varausTable = new TableView<>(varausInfoList);
         varausTable.setPrefHeight(400);
@@ -177,7 +177,7 @@ public class Kayttoliittyma extends Application {
                 Varaus uusi = new Varaus(id, alkamispaivamaara, paattumispaivamaara, henkilomaara, lasku_id, mokki_id, asiakas_id);
                 tietokantaYhteysVaraus.createVaraus(uusi);
 
-                varausTable.setItems(FXCollections.observableArrayList(tietokantaYhteysVaraus.getAllVaraukset()));
+                varausTable.setItems(FXCollections.observableArrayList(getVarausInfo(tietokantaYhteysVaraus.getAllVaraukset())));
                 varausTable.getSelectionModel().clearSelection();
             } catch (NumberFormatException exception) {
                 Alert virhe1 = new Alert(Alert.AlertType.ERROR, "Virhe lisättäessä varausta: " + exception.getMessage());
@@ -199,7 +199,7 @@ public class Kayttoliittyma extends Application {
                     valittu.setId(Integer.parseInt(varausIdKentta.getText()));
 
                     tietokantaYhteysVaraus.updateVaraus(varaus);
-                    varausTable.setItems(FXCollections.observableArrayList(tietokantaYhteysVaraus.getAllVaraukset()));
+                    varausTable.setItems(FXCollections.observableArrayList(getVarausInfo(tietokantaYhteysVaraus.getAllVaraukset())));
                     varausTable.getSelectionModel().clearSelection();
                 } catch (NumberFormatException exception) {
                     Alert virhe2 = new Alert(Alert.AlertType.ERROR, "Virhe päivitettäessä varausta: " + exception.getMessage());
@@ -1209,7 +1209,7 @@ public class Kayttoliittyma extends Application {
         return raporttiVBox;
     }
     
-    public ObservableList<VarausInfo> getVarausInfo(ObservableList<Varaus> list) {
+    public ObservableList<VarausInfo> getVarausInfo(List<Varaus> list) {
         ObservableList<VarausInfo> varausInfo = FXCollections.observableArrayList();
         for (Varaus varaus : list) {
             Asiakas asi = tietokantaYhteysAsiakas.getAsiakastiedot(varaus.asiakas_id);
