@@ -19,7 +19,7 @@ public class TietokantaYhteysAsiakas {
             if (rs.next()) {
                 Osoite osoite = new Osoite();
                 osoite.setId(rs.getInt("ID"));
-                osoite.setOsoite(rs.getString("Katuosoite"));
+                osoite.setKatuosoite(rs.getString("Katuosoite"));
                 osoite.setKaupunki(rs.getString("Kaupunki"));
                 osoite.setMaa(rs.getString("Maa"));
                 osoite.setZip(rs.getInt("Postinumero"));

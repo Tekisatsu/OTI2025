@@ -59,27 +59,27 @@ CREATE TABLE VARAUS (
     FOREIGN KEY (Asiakas_ID) REFERENCES ASIAKAS(ID)
 );
 
-INSERT INTO OSOITE (ID, Katuosoite, Kaupunki, Maa, Postinumero) VALUES
-(1, 'Järvitie 12', 'Kuopio', 'Suomi', '70100'),
-(2, 'Metsäkatu 45', 'Kuopio', 'Suomi', '70100'),
-(3, 'Rantatie 78', 'Kuopio', 'Suomi', '70100'),
-(4, 'Kivimäentie 23', 'Kuopio', 'Suomi', '70100'),
-(5, 'Aurinkotie 56', 'Kuopio', 'Suomi', '70100'),
-(6, 'Kuusitie 89', 'Kuopio', 'Suomi', '70100'),
-(7, 'Linnankatu 34', 'Kuopio', 'Suomi', '70100'),
-(8, 'Hiekkaranta 67', 'Kuopio', 'Suomi', '70100'),
-(9, 'Kalliotie 90', 'Kuopio', 'Suomi', '70100'),
-(10, 'Niittykatu 11', 'Kuopio', 'Suomi', '70100'),
-(11, 'Kalevankatu 25', 'Helsinki', 'Suomi', '00100'),
-(12, 'Satamakatu 8', 'Turku', 'Suomi', '20100'),
-(13, 'Kauppakatu 14', 'Tampere', 'Suomi', '33100'),
-(14, 'Rantakatu 33', 'Oulu', 'Suomi', '90100'),
-(15, 'Kirkkokatu 7', 'Jyväskylä', 'Suomi', '40100'),
-(16, 'Mannerheimintie 56', 'Lahti', 'Suomi', '15100'),
-(17, 'Väinönkatu 12', 'Joensuu', 'Suomi', '80100'),
-(18, 'Pohjoisranta 4', 'Pori', 'Suomi', '28100'),
-(19, 'Asemakatu 22', 'Rovaniemi', 'Suomi', '96100'),
-(20, 'Kaptensgatan 19', 'Vaasa', 'Suomi', '65100');
+INSERT INTO OSOITE (Katuosoite, Kaupunki, Maa, Postinumero) VALUES
+('Järvitie 12', 'Kuopio', 'Suomi', '70100'),
+('Metsäkatu 45', 'Kuopio', 'Suomi', '70100'),
+('Rantatie 78', 'Kuopio', 'Suomi', '70100'),
+('Kivimäentie 23', 'Kuopio', 'Suomi', '70100'),
+('Aurinkotie 56', 'Kuopio', 'Suomi', '70100'),
+('Kuusitie 89', 'Kuopio', 'Suomi', '70100'),
+('Linnankatu 34', 'Kuopio', 'Suomi', '70100'),
+('Hiekkaranta 67', 'Kuopio', 'Suomi', '70100'),
+('Kalliotie 90', 'Kuopio', 'Suomi', '70100'),
+('Niittykatu 11', 'Kuopio', 'Suomi', '70100'),
+('Kalevankatu 25', 'Helsinki', 'Suomi', '00100'),
+('Satamakatu 8', 'Turku', 'Suomi', '20100'),
+('Kauppakatu 14', 'Tampere', 'Suomi', '33100'),
+('Rantakatu 33', 'Oulu', 'Suomi', '90100'),
+('Kirkkokatu 7', 'Jyväskylä', 'Suomi', '40100'),
+('Mannerheimintie 56', 'Lahti', 'Suomi', '15100'),
+('Väinönkatu 12', 'Joensuu', 'Suomi', '80100'),
+('Pohjoisranta 4', 'Pori', 'Suomi', '28100'),
+('Asemakatu 22', 'Rovaniemi', 'Suomi', '96100'),
+('Kaptensgatan 19', 'Vaasa', 'Suomi', '65100');
 
 INSERT INTO HENKILOKUNTA (Kayttajatunnus, Salasana, Kayttoikeus) VALUES
 ('admin', 'admin', 'Admin'),
@@ -93,17 +93,17 @@ INSERT INTO HENKILOKUNTA (Kayttajatunnus, Salasana, Kayttoikeus) VALUES
 ('mokkikodit_008', 'oti25', 'Staff'),
 ('mokkikodit_009', 'hyvasuomi1', 'Staff');
 
-INSERT INTO ASIAKAS (ID, Osoite_ID, Nimi, Sahkoposti, Puhelinnumero) VALUES
-(1, 11, 'Ilmari Ilveskallio', 'ilveskallio@gmail.com', '+358465551234'),
-(2, 12, 'Aino Aaltojärvi', 'a.aaltojarvi@hotmail.com', '+358409876543'),
-(3, 13, 'Onni Oravakangas', 'onni.o@lumipuu.fi', '+358412348765'),
-(4, 14, 'Helmi Haukijärvi', 'helmi_h@gmail.com', '+358503216549'),
-(5, 15, 'Elias Esikko', 'elias.e@sinervuo.fi', '+358441122334'),
-(6, 16, 'Linnea Lehtola', 'linnea78@hotmail.com', '+358456677889'),
-(7, 17, 'Valto Vuorinen', 'valto.v@kotikallio.fi', '+358429988776'),
-(8, 18, 'Saimi Salmela', 'saimi_s@gmail.com', '+358474455667'),
-(9, 19, 'Taavi Tunturila', 'taavi.t@revonlampi.fi', '+358407788990'),
-(10, 20, 'Lempi Laaksonen', 'lempi.l@hotmail.com', '+358432233445');
+INSERT INTO ASIAKAS (Osoite_ID, Nimi, Sahkoposti, Puhelinnumero) VALUES
+(11, 'Ilmari Ilveskallio', 'ilveskallio@gmail.com', '+358465551234'),
+(12, 'Aino Aaltojärvi', 'a.aaltojarvi@hotmail.com', '+358409876543'),
+(13, 'Onni Oravakangas', 'onni.o@lumipuu.fi', '+358412348765'),
+(14, 'Helmi Haukijärvi', 'helmi_h@gmail.com', '+358503216549'),
+(15, 'Elias Esikko', 'elias.e@sinervuo.fi', '+358441122334'),
+(16, 'Linnea Lehtola', 'linnea78@hotmail.com', '+358456677889'),
+(17, 'Valto Vuorinen', 'valto.v@kotikallio.fi', '+358429988776'),
+(18, 'Saimi Salmela', 'saimi_s@gmail.com', '+358474455667'),
+(19, 'Taavi Tunturila', 'taavi.t@revonlampi.fi', '+358407788990'),
+(20, 'Lempi Laaksonen', 'lempi.l@hotmail.com', '+358432233445');
 
 INSERT INTO MOKKI (Osoite_id, Vuokrahinta, Nimi, Tila) VALUES
 (1, 120.00, 'Järvenrantamökki', 'Saatavissa'),
