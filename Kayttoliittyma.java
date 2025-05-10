@@ -591,7 +591,7 @@ public class Kayttoliittyma extends Application {
                 String sahkoposti = sahkopostiKentta.getText();
                 String puhelinnumero = puhelinnumeroKentta.getText();
                 Osoite osoite = osoiteComboBox.getValue();
-                Asiakas asiakas = new Asiakas("0", nimi, sahkoposti, puhelinnumero, osoite);
+                Asiakas asiakas = new Asiakas(0, nimi, sahkoposti, puhelinnumero, osoite);
 
                 yhteysAsiakas.createAsiakas(asiakas);
 
