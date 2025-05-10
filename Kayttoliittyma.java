@@ -174,7 +174,7 @@ public class Kayttoliittyma extends Application {
                 int mokki_id = Integer.parseInt(varausMokkiIdKentta.getText());
                 int asiakas_id = Integer.parseInt(varausAsiakasIdKentta.getText());
 
-                Varaus uusi = new Varaus(id, alkamispaivamaara, paattumispaivamaara, henkilomaara, lasku_id, mokki_id, asiakas_id);
+                Varaus uusi = new Varaus(id,asiakas_id,mokki_id,lasku_id,henkilomaara,alkamispaivamaara, paattumispaivamaara);
                 tietokantaYhteysVaraus.createVaraus(uusi);
 
                 varausTable.setItems(FXCollections.observableArrayList(getVarausInfo(tietokantaYhteysVaraus.getAllVaraukset())));
@@ -198,7 +198,7 @@ public class Kayttoliittyma extends Application {
                     valittu.setAsiakas_id(Integer.parseInt(varausAsiakasIdKentta.getText()));
                     valittu.setId(Integer.parseInt(varausIdKentta.getText()));
 
-                    tietokantaYhteysVaraus.updateVaraus(varaus);
+                    tietokantaYhteysVaraus.updateVaraus(valittu);
                     varausTable.setItems(FXCollections.observableArrayList(getVarausInfo(tietokantaYhteysVaraus.getAllVaraukset())));
                     varausTable.getSelectionModel().clearSelection();
                 } catch (NumberFormatException exception) {
@@ -210,7 +210,7 @@ public class Kayttoliittyma extends Application {
 
         //tapahtumankäsittelijä poista napille
         btnPoista1.setOnAction(e -> {
-            Varaus valittu = varausTable.getSelectionModel().getSelectedItem();
+            Varaus valittu = convertVarausInfo(varausTable.getSelectionModel().getSelectedItem());
             if (valittu != null) {
                 try {
                     tietokantaYhteysVaraus.deleteVaraus(valittu.getId());
