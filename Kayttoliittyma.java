@@ -952,7 +952,7 @@ public class Kayttoliittyma extends Application {
                 String katuosoite = katuKentta.getText();
                 String kaupunki = kaupunkiKentta.getText();
                 String maa = maaKentta.getText();
-                int postinumero = postinumeroKentta.getText();
+                int postinumero = Integer.parseInt(postinumeroKentta.getText());
 
                 Osoite uusi = new Osoite(0, katuosoite, kaupunki, maa, postinumero);
 
