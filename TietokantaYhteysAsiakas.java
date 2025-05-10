@@ -55,7 +55,7 @@ public class TietokantaYhteysAsiakas {
             if (rs.next()) {
                 Osoite osoite = getOsoiteTK(rs.getInt("Osoite_id"));
                 return new Asiakas(
-                        String.valueOf(rs.getInt("ID")),
+                        rs.getInt("ID"),
                         rs.getString("Nimi"),
                         rs.getString("Sahkoposti"),
                         rs.getString("Puhelinnumero"),
