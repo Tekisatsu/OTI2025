@@ -1,3 +1,5 @@
+package org.example.demo14;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,11 +15,28 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+/**
+ * Luokka Kayttoliittyma, jossa määritellään ohjelmiston käyttöliittymän luominen. Luokka sisältää kirjautumisnäkymän ja
+ * pääikkunan, jossa käyttäjä voi valita eri toimintoja valikkorakenteesta - varausten, mökki-, lasku-, asiakas-, osoite- ja raportointitietojen tarkastelun.
+ * Luokka käyttää erillisiä luokkia (Varaus, Mökki, Asiakas, Lasku, Osoite ja Majoituksen raportointi) toimintojen toteuttamiseen.
+ * Luokka toimii pääohjelmana ja käynnistää käyttöliittymän sekä mahdollistaa käyttäjän vuorovaikutuksen ohjelmiston eri osien kanssa.
+ */
 public class Kayttoliittyma extends Application {
+    /**
+     * Henkilökunta - olio, jota käytetään käyttäjän tunnistamiseen kirjautumisnäkymässä.
+     */
     private Henkilokunta henkilokunta = new Henkilokunta();
+
+    /**
+     * Ohjelmiston pääikkuna, johon näkymät asetetaan.
+     */
     private Stage primaryStage;
+
+    /**
+     * Ohjelmiston aloitusmetodi, joka kutsuu kirjautumisnäkymää.
+     * @param primarystage Pääikkuna, johon näkymä rakennetaan
+     */
     public void start(Stage primarystage) {
-        //POP UP IKKUNA
         this.primaryStage = primarystage;
         loggausNakyma();
     }
@@ -50,14 +69,13 @@ public class Kayttoliittyma extends Application {
         Button kirjauduPainike = new Button("Kirjaudu");
 
         //------------------------------------------------------------------------
-        //MENUBAR
-        //pohjalle Borderpane
+
+        // Pääpaneeli ja valikko
         BorderPane paneeli = new BorderPane();
-        //menubar
         MenuBar menuBar = new MenuBar();
-        //päävalikko
         Menu menuValikko = new Menu("Valikko");
-        //valikon alla olevat
+
+        // Valikkovaihtoehdot
         MenuItem menuVaraus = new MenuItem("Varaus");
         MenuItem menuMokki = new MenuItem("Mökit");
         MenuItem menuAsiakas = new MenuItem("Asiakas");
@@ -100,34 +118,43 @@ public class Kayttoliittyma extends Application {
         // Tälle luotu oma metodi Raportti-luokassa
 
         //----------------------------------------------------------------------------------------
-        //vaihdetaan näkymiä menubarista klikkaamalla
+
+        /**
+         * Toiminnallisuus, jolla valikosta vaihdetaan valikkokohteiden näkymät klikkaamalla.
+         */
         Varaus varausnakyma = new Varaus();
         menuVaraus.setOnAction(e -> {
+            // Näkymä vaihtuu Varaus - osioon
             paneeli.setCenter(varausnakyma.luoVarausNakyma());
         });
         Mokki mokkiNakyma = new Mokki();
         menuMokki.setOnAction(e -> {
+            // Näkymä vaihtuu Mökki - osioon
             paneeli.setCenter(mokkiNakyma.luoMokkiNakyma());
         });
         Lasku laskuNakyma = new Lasku();
         menuLasku.setOnAction(e -> {
+            // Näkymä vaihtuu Lasku - osioon
             paneeli.setCenter(laskuNakyma.luoLaskuNakyma());
         });
         Asiakas asiakasNakyma = new Asiakas();
         menuAsiakas.setOnAction(e -> {
+            // Näkymä vaihtuu Asiakas - osioon
             paneeli.setCenter(asiakasNakyma.luoAsiakasNakyma());
         });
         Osoite osoiteNakyma = new Osoite();
         menuOsoite.setOnAction(e -> {
+            // Näkymän vaihtuu Osoite - osioon
             paneeli.setCenter(osoiteNakyma.luoOsoiteNakyma());
         });
         Raportti raporttiNakyma = new Raportti();
         menuRaportointi.setOnAction(e -> {
+            // Näkymä vaihtuu Raportti - osioon
             paneeli.setCenter(raporttiNakyma.luoRaportointiNakyma());
         });
 
         //---------------------------------------------------------------------------
-        //aloitusnäkymä
+        // Luodaan aloitusnäkymä, jossa käyttäjälle kerrotaan ohjeet ja valikkovaihtoehdot
         VBox aloitusVbox = new VBox();
         aloitusVbox.setStyle("-fx-background-color: lightgray;");
         aloitusVbox.setAlignment(Pos.CENTER_LEFT);
@@ -181,22 +208,32 @@ public class Kayttoliittyma extends Application {
         aloitusGrid.add(raportointiLabel, 0, 8);
 
         aloitusVbox.getChildren().add(aloitusGrid);
-
         paneeli.setCenter(aloitusVbox);
 
         //--------------------------------------------------------------------
 
+        // Scene, johon asetetetaan paneeli, koko ja otsikko
         Scene scene = new Scene(paneeli, 1100, 750);
         primaryStage.setTitle("Mökkien varaaminen");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
+    /**
+     * Ohjelman käynnistävä metodi.
+     * @param args Käynnistää ohjelman
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Luodaan kirjautumisnäkymä, jossa käyttäjä voi syöttää käyttäjätunnuksen ja salasanan.
+     * Mikäli käyttäjätunnus ja salasana on oikein, siirrytään käyttöliittymän päänäkymään.
+     * Mikäli tiedot ovat virheelliset, näytetään virheilmoitus.
+     */
     void loggausNakyma() {
+        // Vbox, johon asetetaan kirjautumisnäkymän elementit
         VBox loggaus = new VBox(15);
         loggaus.setAlignment(Pos.CENTER);
         loggaus.setPadding(new Insets(20));
@@ -219,18 +256,23 @@ public class Kayttoliittyma extends Application {
         loggausPainike.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         loggausPainike.setPrefWidth(150);
 
+        // Virheilmoitus - kenttä, joka näytetään virheellisten tietojen syöttämisen jälkeen
         Text virheIlmoitus = new Text();
         virheIlmoitus.setFill(Color.RED);
 
+        // Asetetaan toiminto käyttäjänimi- ja salasanakentille
         loggausPainike.setOnAction(e -> {
             String kayttajanimi = kayttajanimikentta.getText().trim();
             String salasana = salasanakentta.getText().trim();
 
+            // Tarkistetaan, että kentät eivät ole tyhjiä
             if (kayttajanimi.isEmpty() || salasana.isEmpty()) {
                 virheIlmoitus.setText("Syötä käyttäjätunnus ja salasana!");
                 return;
             }
 
+            // Tarkistetaan käyttäjänimi ja salasana. Jos kirjautuminen onnistuu, siirrytään pääsivulle,
+            // muutoin näytetään virheilmoitus
             HenkilokuntaTiedot kayttajatiedot = henkilokunta.login(kayttajanimi, salasana);
             if (kayttajatiedot != null) {
                 virheIlmoitus.setText("");
@@ -242,6 +284,8 @@ public class Kayttoliittyma extends Application {
         });
 
         loggaus.getChildren().addAll(loggausLabel, kayttajanimikentta, salasanakentta, loggausPainike, virheIlmoitus);
+
+        // Scene, johon asetetetaan kirjautumisnäkymä, määritellään ikkunan koko ja otsikko.
         Scene loggausScene = new Scene(loggaus, 400, 300);
         primaryStage.setTitle("Mökkikodit - Sisäänkirjautuminen");
         primaryStage.setScene(loggausScene);
