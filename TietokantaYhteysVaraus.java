@@ -2,15 +2,28 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Luokka, joka hallinnoi varaustietoja tietokannassa.
+ */
 public class TietokantaYhteysVaraus {
     private String url = "jdbc:mysql://localhost:3306/mokkikodit?useSSL=false";
     private String kayttajanimi = "root";
     private String salasana = "tietokantaSalasana";
 
+    /**
+     * Luo yhteyden tietokantaan.
+     * @return tietokantayhteys
+     * @throws SQLException jos yhteyden luominen epäonnistuu
+     */
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, kayttajanimi, salasana);
     }
 
+    /**
+     * Lukee osoitetiedot tietokannasta osoite-ID:n perusteella.
+     * @param osoiteId osoitteen ID
+     * @return osoite-olio, jos löytyy, muuten null
+     */
     private Osoite getOsoiteTK(int osoiteId) {
         String sql = "SELECT * FROM OSOITE WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -31,7 +44,11 @@ public class TietokantaYhteysVaraus {
         return null;
     }
 
-    // lue asiakastiedot
+    /**
+     * Lukee asiakastiedot tietokannasta asiakas-ID:n perusteella.
+     * @param id asiakkaan ID
+     * @return asiakas-olio, mikäli löytyy, muutoin null
+     */
     public Asiakas getAsiakastiedotTK(int id) {
         String sql = "SELECT * FROM ASIAKAS WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -53,7 +70,11 @@ public class TietokantaYhteysVaraus {
         return null;
     }
 
-    // lue mökki ID:n perusteella
+    /**
+     * Lukee mökkitiedot tietokannasta mökki-ID:n perusteella.
+     * @param id mökin ID
+     * @return mokki-olio, jos löytyy, muuten null
+     */
     public Mokki getMokkiTK(int id) {
         String sql = "SELECT * FROM MOKKI WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -74,7 +95,11 @@ public class TietokantaYhteysVaraus {
         return null;
     }
 
-    // lue lasku
+    /**
+     * Lukee laskutiedot tietokannasta lasku-ID:n perusteella.
+     * @param id laskun ID
+     * @return lasku-olio, mikäli löytyy, muutoin null
+     */
     public Lasku getLaskuTK(int id) {
         String sql = "SELECT * FROM LASKU WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -98,7 +123,10 @@ public class TietokantaYhteysVaraus {
         return null;
     }
 
-    // luo varaus
+    /**
+     * Luo uuden varauksen tietokantaan.
+     * @param varaus varauksen tiedot
+     */
     public void createVaraus(Varaus varaus) {
         String sql = "INSERT INTO VARAUS (Lasku_ID, Mokki_ID, Asiakas_ID, Henkilomaara, Aloituspaivamaara, Paattymispaivamaara) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
@@ -116,7 +144,11 @@ public class TietokantaYhteysVaraus {
         }
     }
 
-    // lue varaus
+    /**
+     * Lukee varaustiedot tietokannasta varaus-ID:n perusteella.
+     * @param id varauksen ID
+     * @return varaus-olio, jos löytyy, muuten null
+     */
     public Varaus getVaraus(int id) {
         String sql = "SELECT * FROM VARAUS WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -142,7 +174,10 @@ public class TietokantaYhteysVaraus {
         return null;
     }
 
-    // lue kaikki varaukset
+    /**
+     * Hakee kaikkien varausten tiedot tietokannasta.
+     * @return lista varaus-olioista
+     */
     public List<Varaus> getAllVaraukset() {
         List<Varaus> varaukset = new ArrayList<>();
         String sql = "SELECT * FROM VARAUS";
@@ -168,7 +203,10 @@ public class TietokantaYhteysVaraus {
         return varaukset;
     }
 
-    // päivitä varaus
+    /**
+     * Päivittää varaustiedot tietokannassa.
+     * @param varaus päivitettävät varaustiedot
+     */
     public void updateVaraus(Varaus varaus) {
         String sql = "UPDATE VARAUS SET Lasku_ID = ?, Mokki_ID = ?, Asiakas_ID = ?, Henkilomaara = ?, Aloituspaivamaara = ?, " +
                 "Paattymispaivamaara = ? WHERE ID = ?";
@@ -191,7 +229,10 @@ public class TietokantaYhteysVaraus {
         }
     }
 
-    // poista varaus
+    /**
+     * Poistaa varaustiedot tietokannasta.
+     * @param id poistettavan varauksen ID
+     */
     public void deleteVaraus(int id) {
         String sql = "DELETE FROM VARAUS WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
