@@ -2,16 +2,27 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Luokka, joka hallinnoi laskujen tietoja tietokannassa.
+ */
 public class TietokantaYhteysLasku {
     private String url = "jdbc:mysql://localhost:3306/mokkikodit?useSSL=false";
     private String kayttajanimi = "root";
     private String salasana = "tietokantaSalasana";
 
+    /**
+     * Luo yhteyden tietokantaan.
+     * @return tietokantayhteys
+     * @throws SQLException jos yhteyden luominen epäonnistuu
+     */
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, kayttajanimi, salasana);
     }
 
-    // luo lasku
+    /**
+     * Luo uuden laskun tietokantaan.
+     * @param lasku laskun tiedot
+     */
     public void createLasku(Lasku lasku) {
         String sql = "INSERT INTO LASKU (Viitenumero, Erapaiva, Maksaja, Saaja, Y_tunnus, ALV_prosentti, Maara) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -30,7 +41,11 @@ public class TietokantaYhteysLasku {
         }
     }
 
-    // lue lasku
+    /**
+     * Lukee laskun tiedot ID:n perusteella.
+     * @param id laskun ID
+     * @return lasku-olio, mikäli löytyy, muutoin null
+     */
     public Lasku getLaskuID(int id) {
         String sql = "SELECT * FROM LASKU WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -54,7 +69,10 @@ public class TietokantaYhteysLasku {
         return null;
     }
 
-    // lue kaikki laskut
+    /**
+     * Hakee kaikkien laskujen tiedot tietokannasta.
+     * @return lista lasku-olioista
+     */
     public List<Lasku> getAllLaskut() {
         List<Lasku> laskut = new ArrayList<>();
         String sql = "SELECT * FROM LASKU";
@@ -78,7 +96,10 @@ public class TietokantaYhteysLasku {
         return laskut;
     }
 
-    // päivitä lasku
+    /**
+     * Päivittää laskun tiedot tietokannassa.
+     * @param lasku päivitettävät laskun tiedot
+     */
     public void updateLasku(Lasku lasku) {
         String sql = "UPDATE LASKU SET Viitenumero = ?, Erapaiva = ?, Maksaja = ?, Saaja = ?, Y_tunnus = ?, " +
                 "ALV_prosentti = ?, Maara = ? WHERE ID = ?";
@@ -102,7 +123,10 @@ public class TietokantaYhteysLasku {
         }
     }
 
-    // poista lasku
+    /**
+     * Poistaa laskun tiedot tietokannasta.
+     * @param id poistettavan laskun ID
+     */
     public void deleteLasku(int id) {
         String sql = "DELETE FROM LASKU WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
