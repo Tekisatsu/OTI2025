@@ -13,6 +13,11 @@ import javafx.scene.text.FontWeight;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * Lasku luokka edustaa yksittäistä laskua, joka sisältää tietoa id:stä, viitenumerosta, eräpäivästä, maksajasta,
+ * saajasta, y-tunnuksesta, alv-prosentista ja summasta.
+ * Luokka sisältää metodin, joka sisältää Lasku -näkymän ja sen toiminnallisuudet.
+ */
 public class Lasku {
 
     private int id;
@@ -102,6 +107,11 @@ public class Lasku {
         this.maara = maara;
     }
 
+    /**
+     * Tarkistaa, ovatko kaksi Lasku oliota sisällöltään samat.
+     * @param o Vertailtava olio
+     * @return True, jos kaikki kentät ovat samat, muutoin false
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -110,6 +120,10 @@ public class Lasku {
         return Double.compare(alvprosentti, lasku.alvprosentti) == 0 && Double.compare(maara, lasku.maara) == 0 && Objects.equals(viitenumero, lasku.viitenumero) && Objects.equals(erapaiva, lasku.erapaiva) && Objects.equals(maksaja, lasku.maksaja) && Objects.equals(saaja, lasku.saaja) && Objects.equals(ytunnus, lasku.ytunnus);
     }
 
+    /**
+     * Palauttaa laskun tiedot merkkijonona.
+     * @return Laskun määrä, eräpäivä ja viitenumero
+     */
     @Override
     public String toString() {
         return ""+ maara +", "+erapaiva+", "+viitenumero;
@@ -117,7 +131,11 @@ public class Lasku {
 
     //--------------------------------------------------------------------
     //--------------------------------------------------------------------
-    // laskunäkymän luonti
+
+    /**
+     * Luo laskunäkymän, joka sisältää tekstikentät laskun tietojen syöttämiseen, laskujen tarkasteluun ja muokkaamiseen.
+     * @return Vbox, joka sisältää laskunäkymän
+     */
     public VBox luoLaskuNakyma() {
 
         VBox laskuVbox = new VBox(20);
