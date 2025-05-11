@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+/**Luokka varausten tiedoille ja niiden käsittelyyn**/
 public class Varaus {
     private int id;
     private Asiakas asiakas;
@@ -124,6 +125,8 @@ public class Varaus {
     //--------------------------------------------------------------------
     //--------------------------------------------------------------------
     // Varausnakyman luonti
+    /**Luo käyttöliittymää varten Vbox varaus näkymästä
+     * @return VBox varausnäkymästä**/
     public VBox luoVarausNakyma() {
 
         VBox varausVbox = new VBox(20);
@@ -152,6 +155,9 @@ public class Varaus {
 
         // Miltä valikko näyttää sisältäpäin
         asiakasComboBox.setCellFactory(cb -> new ListCell<>() {
+            /**päivittää ComboBox näkymää asiakkaan tiedoilla
+             * @param item päivitettävä asiakas
+             * @param empty onko kenttä tyhjä**/
             @Override
             protected void updateItem(Asiakas item, boolean empty) {
                 super.updateItem(item, empty);
@@ -160,6 +166,9 @@ public class Varaus {
         });
         // Miltä valikko näyttää ulkoapäin
         asiakasComboBox.setButtonCell(new ListCell<>() {
+            /**päivittää ComboBox näkymää asiakkaan tiedoilla
+             * @param item päivitettävä asiakas
+             * @param empty onko kenttä tyhjä**/
             @Override
             protected void updateItem(Asiakas item, boolean empty) {
                 super.updateItem(item, empty);
@@ -178,6 +187,9 @@ public class Varaus {
 
         // Miltä valikko näyttää sisältäpäin
         mokkiComboBox.setCellFactory(cb -> new ListCell<>() {
+            /**päivittää ComboBox näkymää mökin tiedoilla
+             * @param item päivitettävä mökki
+             * @param empty onko kenttä tyhjä**/
             @Override
             protected void updateItem(Mokki item, boolean empty) {
                 super.updateItem(item, empty);
@@ -186,6 +198,9 @@ public class Varaus {
         });
         // Miltä valikko näyttää ulkoapäin
         mokkiComboBox.setButtonCell(new ListCell<>() {
+            /**päivittää ComboBox näkymää mökin tiedoilla
+             * @param item päivitettävä mökki
+             * @param empty onko kenttä tyhjä**/
             @Override
             protected void updateItem(Mokki item, boolean empty) {
                 super.updateItem(item, empty);
@@ -204,6 +219,9 @@ public class Varaus {
 
         // Miltä valikko näyttää sisältäpäin
         laskuComboBox.setCellFactory(cb -> new ListCell<>() {
+            /**päivittää ComboBox näkymää laskujen tiedoilla
+             * @param item päivitettävä lasku
+             * @param empty onko kenttä tyhjä**/
             @Override
             protected void updateItem(Lasku item, boolean empty) {
                 super.updateItem(item, empty);
@@ -212,6 +230,9 @@ public class Varaus {
         });
         // Miltä valikko näyttää ulkoapäin
         laskuComboBox.setButtonCell(new ListCell<>() {
+            /**päivittää ComboBox näkymää laskujen tiedoilla
+             * @param item päivitettävä lasku
+             * @param empty onko kenttä tyhjä**/
             @Override
             protected void updateItem(Lasku item, boolean empty) {
                 super.updateItem(item, empty);

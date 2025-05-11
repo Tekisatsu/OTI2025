@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+/**Luokka osoitteiden tiedoille**/
 public class Osoite {
     int id;
     String katuosoite;
@@ -78,6 +79,8 @@ public class Osoite {
     //--------------------------------------------------------------------
     //--------------------------------------------------------------------
     // Osoitenäkymän luonti
+    /**Luo käyttöliittymää varten osoite näkymän VBox
+     * @return VBox näkymästä**/
     public VBox luoOsoiteNakyma() {
 
         VBox osoiteVbox = new VBox(20);
