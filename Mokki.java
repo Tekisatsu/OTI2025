@@ -13,7 +13,7 @@ import javafx.scene.text.FontWeight;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-
+/**Mökki luokka sen tietojen käsittelyyn.**/
 public class Mokki {
     int id;
     String nimi;
@@ -92,6 +92,8 @@ public class Mokki {
     //--------------------------------------------------------------------
     //--------------------------------------------------------------------
     // Mokkinäkymän luonti
+    /**Luo JavaFX käyttöliittymää varten VBox mökkien tiedoille ja niiden käsittelyyn.
+     * @return VBox Mökki näkymästä**/
     public VBox luoMokkiNakyma() {
 
         VBox mokkiVbox = new VBox(20);
@@ -124,6 +126,9 @@ public class Mokki {
 
         // Miltä valikko näyttää sisältäpäin
         osoiteComboBox.setCellFactory(cb -> new ListCell<>() {
+            /**päivittää osoite ComboBox
+             * @param item päivitettävä osoite
+             * @param empty onko kenttä tyhjä**/
             @Override
             protected void updateItem(Osoite item, boolean empty) {
                 super.updateItem(item, empty);
@@ -132,6 +137,9 @@ public class Mokki {
         });
         // Miltä valikko näyttää ulkoapäin
         osoiteComboBox.setButtonCell(new ListCell<>() {
+            /**Päivittää osoitteen ComboBox
+             * @param item päivitettävä osoite
+             * @param empty onko kenttä tyhjä**/
             @Override
             protected void updateItem(Osoite item, boolean empty) {
                 super.updateItem(item, empty);
