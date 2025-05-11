@@ -86,7 +86,7 @@ public class Mokki {
 
     @Override
     public String toString() {
-        return nimi+", "+osoite;
+        return "" + getNimi() + ", " + tila;
     }
 
     //--------------------------------------------------------------------
