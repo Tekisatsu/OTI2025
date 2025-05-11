@@ -2,15 +2,28 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Luokka, joka hallinnoi asiakastietoja tietokannassa.
+ */
 public class TietokantaYhteysAsiakas {
     private String url = "jdbc:mysql://localhost:3306/mokkikodit?useSSL=false";
     private String kayttajanimi = "root";
     private String salasana = "tietokantaSalasana";
 
+    /**
+     * Luo yhteyden tietokantaan.
+     * @return tietokantayhteys
+     * @throws SQLException mikäli yhteyden luonti epäonnistuu
+     */
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, kayttajanimi, salasana);
     }
 
+    /**
+     * Lukee osoitetiedot tietokannasta osoite-ID:n perusteella.
+     * @param osoiteId osoitteen ID
+     * @return osoite-olio, mikäli löytyy, muutoin null
+     */
     private Osoite getOsoiteTK(int osoiteId) {
         String sql = "SELECT * FROM OSOITE WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -31,7 +44,10 @@ public class TietokantaYhteysAsiakas {
         return null;
     }
 
-    // luo asiakastiedot
+    /**
+     * Luo uuden asiakastiedon tietokantaan.
+     * @param asiakas asiakastiedot
+     */
     public void createAsiakas(Asiakas asiakas) {
         String sql = "INSERT INTO ASIAKAS (Nimi, Sahkoposti, Puhelinnumero, Osoite_id) VALUES (?, ?, ?, ?)";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -46,7 +62,11 @@ public class TietokantaYhteysAsiakas {
         }
     }
 
-    // lue asiakastiedot
+    /**
+     * Hakee asiakastiedot ID:n perusteella.
+     * @param id asiakkaan ID
+     * @return asiakas-olio, mikäli löytyy, muuten null
+     */
     public Asiakas getAsiakastiedot(int id) {
         String sql = "SELECT * FROM ASIAKAS WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -68,7 +88,10 @@ public class TietokantaYhteysAsiakas {
         return null;
     }
 
-    // lue kaikki asiakkaat
+    /**
+     * Hakee kaikkien asiakkaiden tiedot tietokannasta.
+     * @return lista asiakas-olioista
+     */
     public List<Asiakas> getAllAsiakkaat() {
         List<Asiakas> asiakkaat = new ArrayList<>();
         String sql = "SELECT * FROM ASIAKAS";
@@ -90,7 +113,10 @@ public class TietokantaYhteysAsiakas {
         return asiakkaat;
     }
 
-    // päivitä asiakastiedot
+    /**
+     * Päivittää asiakastiedot tietokannassa.
+     * @param asiakas päivitettävät asiakastiedot
+     */
     public void updateAsiakas(Asiakas asiakas) {
         String sql = "UPDATE ASIAKAS SET Nimi = ?, Sahkoposti = ?, Puhelinnumero = ?, Osoite_id = ? WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -110,7 +136,10 @@ public class TietokantaYhteysAsiakas {
         }
     }
 
-    // poista asiakastiedot
+    /**
+     * Poistaa asiakastiedot tietokannasta.
+     * @param id poistettavan asiakkaan ID
+     */
     public void deleteAsiakas(int id) {
         String sql = "DELETE FROM ASIAKAS WHERE ID = ?";
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
