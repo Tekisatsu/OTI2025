@@ -88,7 +88,7 @@ public class Asiakas {
 
     @Override
     public String toString() {
-        return nimi+", "+sahkoposti+", "+puhelinnumero+", "+osoite;
+        return ""+ nimi;
     }
 
     //--------------------------------------------------------------------
