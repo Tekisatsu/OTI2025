@@ -14,6 +14,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Asiakas luokka edustaa yksittäistä asiakasta, jolla on id, nimi, sähköposti, puhelinnumero ja osoite.
+ * Luokka sisältää metodin, joka sisältää asiakasnäkymän ja sen toiminnallisuudet.
+ */
 public class Asiakas {
 
     private int id;
@@ -78,6 +82,11 @@ public class Asiakas {
         this.osoite = osoite;
     }
 
+    /**
+     * Vertaa kahta Asiakas - oliota keskenään.
+     * @param o Vertailtava olio
+     * @return True jos kentät ovat samat, muutoin false
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -86,6 +95,10 @@ public class Asiakas {
         return Objects.equals(nimi, asiakas.nimi) && Objects.equals(sahkoposti, asiakas.sahkoposti) && Objects.equals(puhelinnumero, asiakas.puhelinnumero) && Objects.equals(osoite, asiakas.osoite);
     }
 
+    /**
+     * Palauttaa asiakkaan nimen merkkijonona.
+     * @return Asiakkaan nimi
+     */
     @Override
     public String toString() {
         return ""+ nimi;
@@ -93,7 +106,12 @@ public class Asiakas {
 
     //--------------------------------------------------------------------
     //--------------------------------------------------------------------
-    // Asiakasnäkymän luonti
+
+    /**
+     * Luo asiakasnäkymän, joka sisältää tekstikentät asiakkaan tietojen syöttämiseen, valikon osoitteen valitsemiseksi
+     * sekä taulukon olemassa olevien asiakkaiden tarkasteluun.
+     * @return Vbox, joka sisältää asiakasnäkymän
+     */
     public VBox luoAsiakasNakyma() {
 
         VBox asiakasVbox = new VBox(20);
@@ -134,6 +152,11 @@ public class Asiakas {
 
         // Miltä valikko näyttää sisältäpäin
         osoiteComboBox.setCellFactory(cb -> new ListCell<>() {
+            /**
+             * Päivittää osoitteen ComboBox
+             * @param item päivitettävä osoite
+             * @param empty onko kenttä tyhjä
+             */
             @Override
             protected void updateItem(Osoite item, boolean empty) {
                 super.updateItem(item, empty);
@@ -142,6 +165,11 @@ public class Asiakas {
         });
         // Miltä valikko näyttää ulkoapäin
         osoiteComboBox.setButtonCell(new ListCell<>() {
+            /**
+             * Päivittää osoitteen ComboBox
+             * @param item päivitettävä osoite
+             * @param empty onko kenttä tyhjä
+             */
             @Override
             protected void updateItem(Osoite item, boolean empty) {
                 super.updateItem(item, empty);
