@@ -69,11 +69,11 @@ public class Raportti {
     public String toString() {
         return String.format(
                 "Raportti ajalta %s - %s\n" +
-                "Varausten määrä: %d\n" +
-                "Kokonaislaskutus: %.2f€\n" +
-                "Suosituin mökki: %s\n" +
-                "Keskimääräinen varauksen kesto: %d päivää\n" +
-                "Asiakasmäärä: %d\n",
+                        "Varausten määrä: %d\n" +
+                        "Kokonaislaskutus: %.2f€\n" +
+                        "Suosituin mökki: %s\n" +
+                        "Keskimääräinen varauksen kesto: %d päivää\n" +
+                        "Asiakasmäärä: %d\n",
                 alkuPvm, loppuPvm, varaustenMaara, kokonaislaskutus,
                 suosituinMokki, keskimKesto, asiakasmaara);
     }
