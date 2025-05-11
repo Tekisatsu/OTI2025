@@ -2,16 +2,28 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Luokka, joka hallinnoi mökkien tietoja tietokannassa.
+ */
 public class TietokantaYhteysMokki {
     private String url = "jdbc:mysql://localhost:3306/mokkikodit?useSSL=false";
     private String kayttajanimi = "root";
     private String salasana = "tietokantaSalasana";
 
+    /**
+     * Luo yhteyden tietokantaan.
+     * @return tietokantayhteys
+     * @throws SQLException jos yhteyden luominen epäonnistuu
+     */
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, kayttajanimi, salasana);
     }
 
-    // osoite haku taulusta
+    /**
+     * Hakee osoitetiedot tietokannasta osoite-ID:n perusteella.
+     * @param osoiteId osoitteen ID
+     * @return osoite-olio, jos löytyy, muuten null
+     */
     public Osoite getOsoite(int osoiteId) {
         String sql = "SELECT * FROM OSOITE WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -32,7 +44,10 @@ public class TietokantaYhteysMokki {
         return null;
     }
 
-    // luo mökki tietokantaan
+    /**
+     * Luo uuden mökin tietokantaan.
+     * @param mokki mökin tiedot
+     */
     public void createMokki(Mokki mokki) {
         String sql = "INSERT INTO MOKKI (Osoite_id, Vuokrahinta, Nimi, Tila) VALUES (?, ?, ?, ?)";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -47,7 +62,11 @@ public class TietokantaYhteysMokki {
         }
     }
 
-    // lue mökki ID:n perusteella
+    /**
+     * Hakee mökkitiedot ID:n perusteella.
+     * @param id mökin ID
+     * @return mokki-olio, mikäli löytyy, muutoin null
+     */
     public Mokki readMokki(int id) {
         String sql = "SELECT * FROM MOKKI WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -68,7 +87,10 @@ public class TietokantaYhteysMokki {
         return null;
     }
 
-    // lue kaikki mökit
+    /**
+     * Hakee kaikkien mökkien tiedot tietokannasta.
+     * @return lista mokki-olioista
+     */
     public List<Mokki> readAllMokit() {
         List<Mokki> mokit = new ArrayList<>();
         String sql = "SELECT * FROM MOKKI";
@@ -88,7 +110,10 @@ public class TietokantaYhteysMokki {
         return mokit;
     }
 
-    // päivitä mökki
+    /**
+     * Päivittää mökkitiedot tietokannassa.
+     * @param mokki päivitettävät mökin tiedot
+     */
     public void updateMokki(Mokki mokki) {
         String sql = "UPDATE MOKKI SET Osoite_id = ?, Vuokrahinta = ?, Nimi = ?, Tila = ? WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -108,7 +133,10 @@ public class TietokantaYhteysMokki {
         }
     }
 
-    // poista mökki
+    /**
+     * Poistaa mökkitiedot tietokannasta.
+     * @param id poistettavan mökin ID
+     */
     public void deleteMokki(int id) {
         String sql = "DELETE FROM MOKKI WHERE ID = ?";
         try (Connection yhteys = getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
