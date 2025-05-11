@@ -49,17 +49,29 @@ class HenkilokuntaTiedot {
                 '}';
     }
 }
-
+/**
+ * Luokka, jonka avulla hallinnoidaan henkilökunnan tietoja tietokannassa.
+ */
 public class Henkilokunta {
     private String url = "jdbc:mysql://localhost:3306/mokkikodit?useSSL=false";
     private String kayttajanimi = "root";
     private String salasana = "tietokantaSalasana";
 
+    /**
+     * Luo yhteyden mokkikodit.sql tietokantaan.
+     * @return tietokantayhteys
+     * @throws SQLException jos yhteyden luominen epäonnistuu
+     */
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, kayttajanimi, salasana);
     }
 
-    // käyttöliittymään yhdistetty login
+    /**
+     * Kirjaa henkilökuntaan kuuluva sisään käyttäjätunnuksella ja salasanalla.
+     * @param kayttajatunnus käyttäjätunnus
+     * @param salasana salasana
+     * @return henkilökuntaan kuuluvan tiedot, jos kirjautuminen onnistuu, muutoin null
+     */
     public HenkilokuntaTiedot login(String kayttajatunnus, String salasana) {
         String sql = "SELECT * FROM HENKILOKUNTA WHERE Kayttajatunnus = ? AND Salasana = ?";
         try (Connection yhteys= getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -80,7 +92,10 @@ public class Henkilokunta {
         return null;
     }
 
-    // luo henkilökunnan jäsen tietokantaan
+    /**
+     * Luo uuden henkilökuntaan kuuluvan tietokantaan.
+     * @param henkilokunta henkilökuntalaisen tiedot
+     */
     public void createHenkilokunta(HenkilokuntaTiedot henkilokunta) {
         String sql = "INSERT INTO HENKILOKUNTA (Kayttajatunnus, Salasana, Kayttoikeus) VALUES (?, ?, ?)";
         try (Connection yhteys= getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -94,7 +109,11 @@ public class Henkilokunta {
         }
     }
 
-    // lue henkilökuntaan kuuluvan tiedot
+    /**
+     * Lukee henkilökuntalaisen tiedot ID:n perusteella.
+     * @param id henkilökuntaan kuuluvan ID
+     * @return henkilökuntalaisen tiedot, jos löytyvät, muuten null
+     */
     public HenkilokuntaTiedot getHenkilokunta(int id) {
         String sql = "SELECT * FROM HENKILOKUNTA WHERE ID = ?";
         try (Connection yhteys= getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -114,7 +133,10 @@ public class Henkilokunta {
         return null;
     }
 
-    // luetaan kaikki henkilökunnan jäsenet tietokannasta
+    /**
+     * Lukee kaikkien henkilökuntaan kuuluvien tiedot tietokannasta.
+     * @return lista henkilökunnan jäsenten tiedoista
+     */
     public List<HenkilokuntaTiedot> getAllHenkilokunta() {
         List<HenkilokuntaTiedot> henkilokunnat = new ArrayList<>();
         String sql = "SELECT * FROM HENKILOKUNTA";
@@ -133,7 +155,10 @@ public class Henkilokunta {
         return henkilokunnat;
     }
 
-    // päivitä henkilökuntaan kuuluvan tiedot
+    /**
+     * Päivittää henkilökuntalaisen tiedot tietokannassa.
+     * @param henkilokunta päivitettävät henkilökuntalaisen tiedot
+     */
     public void updateHenkilokunta(HenkilokuntaTiedot henkilokunta) {
         String sql = "UPDATE HENKILOKUNTA SET Kayttajatunnus = ?, Salasana = ?, Kayttoikeus = ? WHERE ID = ?";
         try (Connection yhteys= getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
@@ -152,7 +177,10 @@ public class Henkilokunta {
         }
     }
 
-    // Poista henkilökuntaan kuuluvan tiedot
+    /**
+     * Poistaa henkilökuntaan kuuluvan henkilön tiedot tietokannasta.
+     * @param id poistettavan henkilökuntalaisen ID
+     */
     public void deleteHenkilokunta(int id) {
         String sql = "DELETE FROM HENKILOKUNTA WHERE ID = ?";
         try (Connection yhteys= getConnection(); PreparedStatement stmt = yhteys.prepareStatement(sql)) {
