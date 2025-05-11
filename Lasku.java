@@ -112,7 +112,7 @@ public class Lasku {
 
     @Override
     public String toString() {
-        return viitenumero+", "+erapaiva+", "+maksaja+", "+maara;
+        return ""+ maara +", "+erapaiva+", "+viitenumero;
     }
 
     //--------------------------------------------------------------------
