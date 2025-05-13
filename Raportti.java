@@ -13,14 +13,40 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+/**
+ * Raportti-luokka mallintaa raporttia, johon voidaan tallentaa päivämääräväli, varausmäärä,
+ * kokonaislaskutus, päivämäärävälin suosituin mökki, varausten keskimääräinen kesto, ja
+ * rekisteröityjen asiakkaiden määrä.
+ */
 public class Raportti {
 
+    /**
+     * Tarkasteltavan välin alkamispäivämäärä.
+     */
     private LocalDate alkuPvm;
+    /**
+     * Tarkasteltavan välin päättymispäivämäärä.
+     */
     private LocalDate loppuPvm;
+    /**
+     * Varausmäärä tarkasteltavalla välillä.
+     */
     private int varaustenMaara;
+    /**
+     * Kokonaislaskutus tarkasteltavalla välillä.
+     */
     private BigDecimal kokonaislaskutus;
+    /**
+     * Suosituin mökki tarkasteltavalla välillä.
+     */
     private String suosituinMokki;
+    /**
+     * Varausten keskimääräinen kesto päivinä tarkasteltavalla välillä.
+     */
     private int keskimKesto;
+    /**
+     * Varauksiin liitettyjen uniikkien asiakkaiden määrä tarkasteltavalla välillä.
+     */
     private int asiakasmaara;
 
     public Raportti() {
@@ -78,6 +104,10 @@ public class Raportti {
                 suosituinMokki, keskimKesto, asiakasmaara);
     }
 
+    /**
+     * Metodi raportointinäkymän luomiseen käyttöliittymään.
+     * @return raportointinäkymä VBoxina.
+     */
     //--------------------------------------------------------------------
     //--------------------------------------------------------------------
     // Raportointinäkymän luonti
