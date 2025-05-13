@@ -2,15 +2,28 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TietokantaYhteysOsoite-luokka sisältää kaikki metodit, joita tarvitaan käyttöliittymän ja
+ * tietokannan yhdistämiseen osoitteiden osalta.
+ */
 public class TietokantaYhteysOsoite {
     private String url = "jdbc:mysql://localhost:3306/mokkikodit?useSSL=false";
     private String kayttajanimi = "root";
     private String salasana = "tietokantaSalasana";
 
+    /**
+     * Luo yhteyden tietokantaa.
+     * @return tietokantayhteys
+     * @throws SQLException mikäli yhteyden luonti epäonnistuu
+     */
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, kayttajanimi, salasana);
     }
 
+    /**
+     * Luo uuden osoitetiedon tietokantaan.
+     * @param osoite osoitetiedot
+     */
     // luo osoitetiedot
     public void createOsoite(Osoite osoite) {
         String sql = "INSERT INTO OSOITE (Katuosoite, Kaupunki, Maa, Postinumero) VALUES (?, ?, ?, ?)";
@@ -26,6 +39,10 @@ public class TietokantaYhteysOsoite {
         }
     }
 
+    /**
+     * Hakee kaikkien osoitteiden tiedot tietokannasta.
+     * @return lista osoite-olioista
+     */
     // lue kaikki osoitteet
     public List<Osoite> getAllOsoitteet() {
         List<Osoite> osoitteet = new ArrayList<>();
@@ -46,6 +63,10 @@ public class TietokantaYhteysOsoite {
         return osoitteet;
     }
 
+    /**
+     * Päivittää osoitetiedot tietokannassa.
+     * @param osoite päivitettävät osoitetiedot
+     */
     // päivitä osoite
     public void updateOsoite(Osoite osoite) {
         String sql = "UPDATE OSOITE SET Katuosoite = ?, Kaupunki = ?, Maa = ?, Postinumero = ? WHERE ID = ?";
@@ -66,6 +87,10 @@ public class TietokantaYhteysOsoite {
         }
     }
 
+    /**
+     * Poistaa osoitetiedot tietokannasta.
+     * @param id poistettavan osoitteen ID
+     */
     // poista osoite
     public void deleteOsoite(int id) {
         String sql = "DELETE FROM OSOITE WHERE ID = ?";
