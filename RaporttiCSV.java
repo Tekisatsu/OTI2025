@@ -4,8 +4,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * RaporttiCSV-luokka sisältää metodit raportin csv-tiedoston luontiin.
+ */
 public class RaporttiCSV {
 
+    /**
+     * Lukee raportin tiedot csv-tiedostosta.
+     * @param tiedostoNimi String
+     * @return Luetut raportit listana.
+     */
     public static List<Raportti> lueRaportitCSV(String tiedostoNimi) {
         List<Raportti> raportit = new ArrayList<>();
 
@@ -41,6 +49,11 @@ public class RaporttiCSV {
         return raportit;
     }
 
+    /**
+     * Metodi luotujen raporttien kirjoittamiseen csv-tiedostoon.
+     * @param raportit List
+     * @param tiedostoPolku String
+     */
     public static void kirjoitaRaportitCSV(List<Raportti> raportit, String tiedostoPolku) {
         try (FileWriter writer = new FileWriter(tiedostoPolku)) {
             writer.write("Alku,Loppu,Varauksia,Laskutus,SuosituinMokki,Keskikesto,Asiakkaita\n");
