@@ -54,7 +54,6 @@ public class Kayttoliittyma extends Application {
         kayttajaTunnusKentta.setPromptText("Käyttäjätunnus");
         kayttajaTunnusKentta.setPrefWidth(200);
         Button kayttajaPainike = new Button("Lisää käyttäjätunnus");
-        Text tulos1Teksti = new Text();
         kayttajaTunnusBoksi.getChildren().addAll(kayttajaTunnusKentta, kayttajaPainike);
 
         HBox salasanaBoksi = new HBox(10);
@@ -63,10 +62,7 @@ public class Kayttoliittyma extends Application {
         salasanaKentta.setPromptText("Salasana");
         salasanaKentta.setPrefWidth(200);
         Button salasanaPainike = new Button("Lisää salasana");
-        Text tulos2Teksti = new Text();
         salasanaBoksi.getChildren().addAll(salasanaKentta, salasanaPainike);
-
-        Button kirjauduPainike = new Button("Kirjaudu");
 
         //------------------------------------------------------------------------
 
@@ -119,7 +115,7 @@ public class Kayttoliittyma extends Application {
 
         //----------------------------------------------------------------------------------------
 
-        /**
+        /*
          * Toiminnallisuus, jolla valikosta vaihdetaan valikkokohteiden näkymät klikkaamalla.
          */
         Varaus varausnakyma = new Varaus();
