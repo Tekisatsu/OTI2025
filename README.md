@@ -11,4 +11,4 @@ Ohjelmaa käytetään kopioimalla Github repo itsellesi ja käynnistämällä Ka
 - **Lisäys:** Täytä halutun kategorian näkymästä tarvittavat tiedot ja Lisää nappi päivittää tiedot tietokantaan ja lisää alla olevaan pöytään lisäyksesi.
 - **Päivitys:** Valitse alareunasta olevasta pöydästä muokattava kohde. Pöydän yläpuolella olevien kenttien avulla voit muokata sen tietoja ja painamalla Päivitä tiedot päivittyvät tietokantaan ja pöytään.
 - **Poisto:** Valitse alareunasta olevasta pöydästä poistettava kohde ja paina Poista painiketta. Tiedot poistuvat tietokannasta ja pöydästä.
-- **Raportti:** Valitse haluamasi aikajana miltä ajalta haluat tuottaa raportin. Alas pöytään ilmaantuu näkymä raportista, jonka voit tallentaa CSV tiedostoon jatkokäsittelyä varten.
+- **Raportti:** Valitse haluamasi aikajana miltä ajalta haluat tuottaa raportin. Alas pöytään ilmaantuu näkymä raportista, joka tallennetaan automaattisesti CSV tiedostoon jatkokäsittelyä varten. Poista haluamasi osa raportista korostamalla ja painamalla Poista painiketta.
